@@ -49,10 +49,9 @@ function pushAllToServiceNow() {
                 body[sn.types[mapping.type].ts] = fs.readFileSync(file, 'utf8');
                 break;
             case '.js':
-                field = sn.types[mapping.type].js;
+                body[sn.types[mapping.type].js] = fs.readFileSync(distPath, 'utf8');
             default:
-                content = fs.readFileSync(file, 'utf8');
-                break;
+                throw 'Unknown file type ' + ext;
         }
         
         var uri = sn.uri + '/api/now/table/' + mapping.type + '/' + id;
