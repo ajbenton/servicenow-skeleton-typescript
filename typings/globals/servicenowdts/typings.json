@@ -1,0 +1,8 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/bryceg/servicenow-dts/bde2101bdbaae03cbcb773a466f19411fb412342/servicenowserver-scoped.d.ts",
+    "raw": "github:bryceg/servicenow-dts/servicenowserver-scoped.d.ts#bde2101bdbaae03cbcb773a466f19411fb412342",
+    "typings": "https://raw.githubusercontent.com/bryceg/servicenow-dts/bde2101bdbaae03cbcb773a466f19411fb412342/servicenowserver-scoped.d.ts"
+  }
+}

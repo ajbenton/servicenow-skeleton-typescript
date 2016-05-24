@@ -1,0 +1,17 @@
+{
+  "name": "servicenow-dev-skeleton",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "author": "Bryce Godfrey",
+  "license": "ISC",
+  "devDependencies": {
+    "file": "^0.2.2",
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^2.13.4",
+    "q": "^1.4.1",
+    "request": "^2.72.0",
+    "require-dir": "^0.3.0",
+    "typings": "^1.0.4"
+  }
+}
