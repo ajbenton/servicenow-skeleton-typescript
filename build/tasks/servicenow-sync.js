@@ -1,10 +1,11 @@
-// Copyright � 2015- Avanade, Inc.
+// Copyright © 2015 Avanade, Inc.
+
 var gulp = require('gulp');
 var fs = require('fs');
 var paths = require('../paths');
 var file = require('file');
 var path = require('path');
-var sn = require('../servicenow');
+var sn = require('../../servicenowconfig');
 var request = require('request');
 var Q = require('q');
 

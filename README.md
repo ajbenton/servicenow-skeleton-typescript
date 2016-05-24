@@ -5,7 +5,7 @@
 - npm install typings -g
 - typings install
 
-## Configure build/servicenow.js
+## Configure servicenowconfig.js
 - uri = path to your servicenow instance
 - application = sys_id of the ServiceNow scoped application your are developing
 - types = Entity types to sync from ServiceNow
@@ -17,7 +17,7 @@
 ## Gulp Tasks Usage
 
 ### gulp dts
-Generates a servicenow.d.ts file from the servicenow config dts
+Generates a servicenow.d.ts file from the servicenowconfig dts section
 
 ### gulp sn-pull
 Syncronizes your environment with the ServiceNow application specified in your config file.  Similar to "git pull"

@@ -1,3 +1,5 @@
+// Copyright © 2015 Avanade, Inc.
+
 var gulp = require('gulp');
 var ts = require('gulp-typescript');
 var paths = require('../paths');

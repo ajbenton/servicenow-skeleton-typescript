@@ -6,7 +6,7 @@ var file = require('file');
 var path = require('path');
 var request = require('request');
 var paths = require('../paths');
-var sn = require('../servicenow');
+var sn = require('../../servicenowconfig');
 var Q = require("q");
 
 gulp.task('dts', [], function () {

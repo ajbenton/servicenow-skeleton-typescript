@@ -1,14 +1,10 @@
 module.exports = {
-    uri: 'https://[instance].service-now.com',
-    application: '[app_sys_id]',
     mapping: 'snsyncmapping.json',
     types: {
         'sys_script': {js: 'script', ts: 'u_typescript'}, 
         'sys_script_include': {js: 'script', ts: 'u_typescript'}
     },
     auth: {
-        user: '[USERNAME]',
-        pwd: '[PASSWORD]'
     },
     dts: {
         path: 'typings/servicenow.d.ts',
