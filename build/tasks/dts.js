@@ -7,6 +7,7 @@ var path = require('path');
 var request = require('request');
 var paths = require('../paths');
 var sn = require('../../servicenowconfig');
+var auth = require('../../snauth');
 var Q = require("q");
 
 gulp.task('dts', [], function () {
@@ -14,7 +15,7 @@ gulp.task('dts', [], function () {
     
     var promises = [];
     for(var i=0; i < types.length; i++){
-        promises.push(get(sn.uri + '/api/11527/dtsgenerator/' + types[i]));
+        promises.push(get(sn.uri + sn.dts.resource + types[i]));
     }
     
     var prom = Q
