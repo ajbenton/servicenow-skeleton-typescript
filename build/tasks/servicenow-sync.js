@@ -56,10 +56,8 @@ function pushAllToServiceNow() {
         
         var uri = sn.uri + '/api/now/table/' + mapping.type + '/' + id;
         console.info('Uploading ' + id + ' to ' + uri);
-        
 
         var json = JSON.stringify(body);
-        console.log(json);
         
         promises.push(putToServiceNow(uri, json));
     });
