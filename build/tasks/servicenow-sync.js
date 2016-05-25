@@ -6,7 +6,6 @@ var paths = require('../paths');
 var file = require('file');
 var path = require('path');
 var sn = require('../../servicenowconfig');
-var auth = require('../../snauth');
 var request = require('request');
 var Q = require('q');
 
@@ -135,7 +134,7 @@ function putToServiceNow(uri, body){
 };
 
 function checkAuth(){
-    if(!auth.user || !auth.password){
+    if(!sn.auth.user || !sn.auth.password){
         throw 'Authentication to ServiceNow is not set for your environment!  Configure snauth.js with your usersname and password';
     }
 }
@@ -152,7 +151,7 @@ function invokeServiceNow(uri, method, body, user, password){
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'Authorization': 'Basic ' + (new Buffer(auth.user + ':' + auth.password)).toString('base64')
+                'Authorization': 'Basic ' + (new Buffer(sn.auth.user + ':' + sn.auth.password)).toString('base64')
             }
         },
         function(err, response, body){

@@ -6,6 +6,10 @@ module.exports = {
         'sys_script': {js: 'script', ts: 'u_typescript'}, 
         'sys_script_include': {js: 'script', ts: 'u_typescript'}
     },
+    auth: {
+        user: '',
+        password: ''
+    },
     dts: {
         resource: '/api/11527/tableschema/',
         path: 'typings/servicenow.d.ts',
