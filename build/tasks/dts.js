@@ -70,6 +70,13 @@ function getTypesFromFile(path){
         types.push(match[1]);
     }
     
+    regex = /\/\/\/<dts>([\w,-]+)<\/dts>/g;
+    while(match = regex.exec(content)){
+        match[1].split(',').forEach(m => {
+            types.push(m);
+        });
+    }
+    
     return types;
 }
 
