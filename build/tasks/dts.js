@@ -44,7 +44,7 @@ function getAllTypes(){
     var types = [];
     file.walkSync(paths.src, function (dirPath, dirs, files) {
         for (var i in files) {
-            var file = dirPath + files[i];
+            var file = dirPath + '/' + files[i];
             var ext = path.extname(file);
             if(ext == '.ts'){
                 var t = getTypesFromFile(file);
