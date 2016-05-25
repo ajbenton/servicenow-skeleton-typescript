@@ -8,7 +8,6 @@
 ## Configure servicenowconfig.js
 - uri = path to your servicenow instance
 - application = sys_id of the ServiceNow scoped application your are developing
-- types = Entity types to sync from ServiceNow
 -- types['typename'].js = Field on type to set the javascript source too
 -- types['typename'].ts = Field on the type to set the typescript source too
 - auth = user and password for running gulp tasks as (Uses basic auth, so needs to be a local account not SSO with priveledges to all types)
@@ -17,7 +16,7 @@
 ## Gulp Tasks Usage
 
 ### gulp dts
-Generates a servicenow.d.ts file from the servicenowconfig dts section
+Generates a servicenow.d.ts file from the servicenowconfig dts section.  This will scan all .ts files and locate any type references for GlideRecords.
 
 ### gulp sn-pull
 Syncronizes your environment with the ServiceNow application specified in your config file.  Similar to "git pull"

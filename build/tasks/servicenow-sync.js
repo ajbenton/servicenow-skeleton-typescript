@@ -66,7 +66,7 @@ function pushAllToServiceNow() {
     return Q.all(promises);
 }
 
-function getAllSysMetaFiles() {
+function getAllSysMetaFiles() {    
     var uri = sn.uri + '/api/now/table/sys_metadata?sysparm_query=sys_scope=' + sn.application + '^sys_class_nameIN' + Object.keys(sn.types).toString();
             
     return Q.when(getFromServiceNow(uri))

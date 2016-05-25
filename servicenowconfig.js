@@ -1,6 +1,6 @@
 module.exports = {
-    uri: 'https://[instance].service-now.com',
-    application: '[app sys_id]',
+    uri: 'https://[INSTANCE].service-now.com',
+    application: '[APP SYS_ID]',
     mapping: 'snsyncmapping.json',
     types: {
         'sys_script': {js: 'script', ts: 'u_typescript'}, 
@@ -11,9 +11,6 @@ module.exports = {
         path: 'typings/servicenow.d.ts',
         refs: [
             'index.d.ts'
-        ],
-        types: [
-            'core_company',
         ],
         ignoreFields: [
             'sys_id',

@@ -11,10 +11,11 @@ var auth = require('../../snauth');
 var Q = require("q");
 
 gulp.task('dts', [], function () {
-    var types = sn.dts.types;
+    var types = getAllTypes();
     
     var promises = [];
     for(var i=0; i < types.length; i++){
+        console.log('Generating typing for: ' + types[i]);
         promises.push(get(sn.uri + sn.dts.resource + types[i]));
     }
     
@@ -39,6 +40,39 @@ gulp.task('dts', [], function () {
     
     return prom;
 });
+
+function getAllTypes(){
+    var types = [];
+    file.walkSync(paths.src, function (dirPath, dirs, files) {
+        for (var i in files) {
+            var file = dirPath + files[i];
+            var ext = path.extname(file);
+            if(ext == '.ts'){
+                var t = getTypesFromFile(file);
+                t.forEach(type => {
+                    if(types.indexOf(type) == -1){
+                        types.push(type);
+                    }
+                })
+            }
+        }
+    });
+    
+    return types;
+}
+
+function getTypesFromFile(path){
+    var content = fs.readFileSync(path, 'utf8');
+    
+    var regex = /GlideRecord\(['"]([\w-]+)['"]\)/g;
+    var types = [];
+    
+    while(match = regex.exec(content)){
+        types.push(match[1]);
+    }
+    
+    return types;
+}
 
 function writeDTS(target, definitions){
     var dts = '';
