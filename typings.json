@@ -1,6 +1,6 @@
 {
   "dependencies": {},
   "globalDependencies": {
-    "servicenowdts": "github:bryceg/servicenow-dts/servicenowserver-scoped.d.ts#bde2101bdbaae03cbcb773a466f19411fb412342"
+    "servicenowdts": "github:bryceg/servicenow-dts/servicenowserver-scoped.d.ts#557a9a5ef2e161def6feaf85e732c67c1c57275f"
   }
 }
