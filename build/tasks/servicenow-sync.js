@@ -50,6 +50,7 @@ function pushAllToServiceNow() {
                 break;
             case '.js':
                 body[sn.types[mapping.type].js] = fs.readFileSync(distPath, 'utf8');
+                break;
             default:
                 throw 'Unknown file type ' + ext;
         }
