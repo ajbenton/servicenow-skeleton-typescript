@@ -32,6 +32,8 @@ to a table, then add this to the top of your ts file and comma separate multiple
 \\\<dts>tablename1,tablename2</dts>
 ```
 
+A ServiceNow DTS is maintained at https://github.com/bryceg/servicenow-dts
+
 ## Gulp Tasks Usage
 
 ### gulp dts
