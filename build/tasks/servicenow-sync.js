@@ -8,8 +8,11 @@ var path = require('path');
 var sn = require('../../servicenowconfig');
 var request = require('request');
 var Q = require('q');
+var sequence = require('run-sequence')
 
-gulp.task('sn-sync', ['sn-pull', 'dts']);
+gulp.task('sn-sync', function(){
+    sequence('sn-pull', 'dts');
+});
 
 gulp.task('sn-pull', [], function() {
     return getAllSysMetaFiles();
