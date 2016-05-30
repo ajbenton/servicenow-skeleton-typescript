@@ -11,8 +11,6 @@ as well as a scripted rest API for the automatic DTS generator to query schema f
 - Import the update set in integration\typescript_integration_udpate_set.xml  This adds a u_typescript field to the sys_script and sys_script_include tables for storing the typescript.
 - The automatic dts generation requires a SN rest endpoint to query for the table schemas it finds in your ts files.  import the update set xml integration\restschema_update_set.xml (only works in Geneva or later).
 
-Any further tables you add the u_typescript field too need to be configured in the servicenowconfig.js file types property to tell the gulp tasks what fields on that table to use for the javascript and typescript.
-
 ## Configure servicenowconfig.js for your application
 - uri = path to your servicenow instance
 - application = sys_id of the ServiceNow scoped application your are developing
