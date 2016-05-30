@@ -1,0 +1,8 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/bryceg/servicenow-dts/1.0/server/scoped-helsinki/servicenowserver.d.ts",
+    "raw": "github:bryceg/servicenow-dts/server/scoped-helsinki/servicenowserver.d.ts#1.0",
+    "typings": "https://raw.githubusercontent.com/bryceg/servicenow-dts/1.0/server/scoped-helsinki/servicenowserver.d.ts"
+  }
+}
