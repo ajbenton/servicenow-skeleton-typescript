@@ -41,6 +41,7 @@ Generates a servicenow.d.ts file from the servicenowconfig dts section.  This wi
 
 ### gulp sn-pull
 Syncronizes your environment with the ServiceNow application specified in your config file.  Similar to "git pull"
+
 WARNING: This will overwrite any src files your have not uploaded to SN yet, so be sure to run sn-pull first or prepare for any edited files to be overwritten!
 
 ### gulp sn-push
@@ -48,4 +49,5 @@ Compliles any typescript to javascript and uploads the results to the applicatio
 
 ### gulp sn-sync
 Runs gulp sn-pull and dts tasks
+
 WARNING: See sn-pull task
