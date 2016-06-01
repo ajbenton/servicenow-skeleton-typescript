@@ -1,6 +1,6 @@
 module.exports = {
-    uri: 'https://dev17466.service-now.com',
-    application: '42d031e2db6616001a1ada11cf9619b3',
+    uri: 'https://[INSTANCE].service-now.com',
+    application: '[APP_ID]',
     mapping: 'snsyncmapping.json',
     dev_integration_endpoint: '/api/11527/dev_integration/',
     types: {

@@ -27,16 +27,11 @@ function pushAllToServiceNow() {
     
     var mappings = JSON.parse(fs.readFileSync(sn.mapping, 'utf8'));
     
-    mappings.forEach(item => {
-        
-    })
-    
-    
-    Object.keys(mappings).forEach(id => {
-        var mapping = mappings[id];
-        var file = mapping.path;  
+    Object.keys(mappings).forEach(key => {
+        var item = mappings[key];
+        var file = item.path;  
         var ext = path.extname(file);
-                      
+        
         if(!fs.existsSync(file)){
             if(ext == '.js'){
                 file = file.substring(0, file.length - ext.length) + '.ts';
@@ -46,53 +41,82 @@ function pushAllToServiceNow() {
                 }   
             }
         }
-                
-        var body = {};
+        
+        var b = {
+            id: key,
+            etag: item.etag,
+            table: item.type,
+            fields: {}
+        };
         
         switch(ext){
             case '.ts':
-                var distPath = file.replace(paths.src, paths.dist);
+                var distPath = file.replace(path.normalize(paths.src), path.normalize(paths.dist));
                 distPath = distPath.substring(0, distPath.length - ext.length) + '.js';
-                body[sn.types[mapping.type].js] = fs.readFileSync(distPath, 'utf8');
-                body[sn.types[mapping.type].ts] = fs.readFileSync(file, 'utf8');
+                b.fields[sn.types[item.type].js] = fs.readFileSync(distPath, 'utf8');
+                b.fields[sn.types[item.type].ts] = fs.readFileSync(file, 'utf8');
                 break;
             case '.js':
-                body[sn.types[mapping.type].js] = fs.readFileSync(distPath, 'utf8');
+                b.fields[sn.types[item.type].js] = fs.readFileSync(distPath, 'utf8');
                 break;
             default:
                 throw 'Unknown file type ' + ext;
-        }
+        }        
         
-        var uri = sn.uri + '/api/now/table/' + mapping.type + '/' + id;
-        console.info('Uploading ' + id + ' to ' + uri);
-
-        var json = JSON.stringify(body);
+        var uri = sn.uri + sn.dev_integration_endpoint + '/' + item.type + '/' + key;
         
-        promises.push(putToServiceNow(uri, json));
+        var json = JSON.stringify(b);
+        
+        promises.push(
+            putToServiceNow(uri, json)
+                .then(response => {
+                    if(response.code == 200){
+                        var d = JSON.parse(response.body).result;
+                        mappings[d.id].etag = d.etag;                     
+                        console.log(d.name + ' was updated');
+                    }
+                    else if(response.code == 409){
+                        console.warn("WARN: " + item.path + ' is out of sync, run "gulp pull"!');
+                    }
+                    else if(response.code == 304){
+                        //unmodified
+                    }
+                    else{
+                        console.error(response.code + ': ' + response.body);
+                    }
+                })
+        );
     });
         
-    return Q.all(promises);
+    return Q.all(promises)
+        .then(() => {
+            fs.writeFileSync(sn.mapping, JSON.stringify(mappings, undefined, 3));
+        });
 }
 
 function getAllApplicationTypes() {  
-    var mappings = [];
+    var mappings = {};
     var promises = [];
      
     Object.keys(sn.types).forEach(type => {        
         var uri = sn.uri + sn.dev_integration_endpoint + 'application/' + sn.application + '/' + type;
         
         promises.push(Q.when(getFromServiceNow(uri))
-            .then(body => {
-                var result = JSON.parse(body).result;
-                result.forEach(item => {
-                    var p = writeFile(item);
-                    mappings.push({
-                        id: item.id,
-                        type: item.table,
-                        etag: item.etag,
-                        path: p
+            .then(response => {
+                if(response.code == 200){               
+                    var result = JSON.parse(response.body).result;
+                    result.forEach(item => {
+                        var p = writeFile(item);
+                        mappings[item.id] = {
+                            type: item.table,
+                            etag: item.etag,
+                            path: p
+                        };
                     });
-                })
+                }
+                else{
+                    throw 'GET ERROR (' + response.code + '): ' + response.body;
+                }
             })
         );
     });
@@ -160,14 +184,11 @@ function invokeServiceNow(uri, method, body, user, password){
             }
         },
         function(err, response, body){
-            if(!err && response.statusCode != 200){
-                defer.reject('FETCH ERROR: ' + response.statusCode + ' :: ' + body);
-            }
-            else if(err){
-                defer.reject(err);                
+            if(err){
+                defer.reject('ERROR: ' + err);
             }
             else{
-                defer.resolve(body);
+                defer.resolve({code: response.statusCode, body: body});
             }
         });
         

@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<unload unload_date="2016-06-01 06:26:15">
+<sys_remote_update_set action="INSERT_OR_UPDATE">
+<application display_value="Global">global</application>
+<application_name>Global</application_name>
+<application_scope>global</application_scope>
+<application_version/>
+<collisions/>
+<commit_date/>
+<deleted/>
+<description/>
+<inserted/>
+<name>Dev Integration REST API</name>
+<origin_sys_id/>
+<release_date/>
+<remote_sys_id>a3e3162cdb3712001a1ada11cf961923</remote_sys_id>
+<state>loaded</state>
+<summary/>
+<sys_class_name>sys_remote_update_set</sys_class_name>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2016-06-01 06:26:15</sys_created_on>
+<sys_id>5311f360dbb712001a1ada11cf96194c</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2016-06-01 06:26:15</sys_updated_on>
+<update_set display_value=""/>
+<update_source display_value=""/>
+<updated/>
+</sys_remote_update_set>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_ws_operation_44316220db7712001a1ada11cf961990</name>
+<payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_ws_operation"&gt;&lt;sys_ws_operation action="INSERT_OR_UPDATE"&gt;&lt;active&gt;true&lt;/active&gt;&lt;consumes&gt;application/json,application/xml,text/xml&lt;/consumes&gt;&lt;consumes_customized&gt;false&lt;/consumes_customized&gt;&lt;default_operation_uri/&gt;&lt;enforce_acl/&gt;&lt;http_method&gt;GET&lt;/http_method&gt;&lt;name&gt;Get application types&lt;/name&gt;&lt;operation_script&gt;&lt;![CDATA[(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+
+	var types = [];
+	
+	var meta = new GlideRecordSecure(request.pathParams.table);
+	meta.addQuery('sys_scope', request.pathParams.id);
+	meta.query();
+	while(meta.next()){
+		var t = {
+			id: meta.sys_id + '',
+			etag: meta.sys_updated_on + '',
+			table: meta.getRecordClassName(),
+			name: meta.getDisplayValue(),
+			fields: {}
+		};
+		
+		for(var key in meta){
+			t.fields[key] = meta[key] + '';
+		}
+		
+		types.push(t);
+	}
+	
+	response.setBody(types);
+
+})(request, response);]]&gt;&lt;/operation_script&gt;&lt;operation_uri&gt;/api/11527/dev_integration/application/{id}/{table}&lt;/operation_uri&gt;&lt;produces&gt;application/json,application/xml,text/xml&lt;/produces&gt;&lt;produces_customized&gt;false&lt;/produces_customized&gt;&lt;relative_path&gt;/application/{id}/{table}&lt;/relative_path&gt;&lt;request_example/&gt;&lt;requires_acl_authorization&gt;false&lt;/requires_acl_authorization&gt;&lt;requires_authentication&gt;true&lt;/requires_authentication&gt;&lt;short_description/&gt;&lt;sys_class_name&gt;sys_ws_operation&lt;/sys_class_name&gt;&lt;sys_created_by&gt;admin&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2016-06-01 00:41:04&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;true&lt;/sys_customer_update&gt;&lt;sys_id&gt;44316220db7712001a1ada11cf961990&lt;/sys_id&gt;&lt;sys_mod_count&gt;4&lt;/sys_mod_count&gt;&lt;sys_name&gt;Get application types&lt;/sys_name&gt;&lt;sys_package display_value="Global" source="global"&gt;global&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Global"&gt;global&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_ws_operation_44316220db7712001a1ada11cf961990&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;admin&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2016-06-01 00:57:37&lt;/sys_updated_on&gt;&lt;web_service_definition display_value="DEV Integration"&gt;d404162cdb3712001a1ada11cf9619ba&lt;/web_service_definition&gt;&lt;web_service_version/&gt;&lt;/sys_ws_operation&gt;&lt;/record_update&gt;</payload>
+<remote_update_set display_value="Dev Integration REST API">5311f360dbb712001a1ada11cf96194c</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2016-06-01 06:26:15</sys_created_on>
+<sys_id>1711f360dbb712001a1ada11cf96194c</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2016-06-01 06:26:15</sys_updated_on>
+<table/>
+<target_name>Get application types</target_name>
+<type>Scripted REST Resource</type>
+<update_domain>global</update_domain>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_ws_operation_7b74d62cdb3712001a1ada11cf9619eb</name>
+<payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_ws_operation"&gt;&lt;sys_ws_operation action="INSERT_OR_UPDATE"&gt;&lt;active&gt;true&lt;/active&gt;&lt;consumes&gt;application/json,application/xml,text/xml&lt;/consumes&gt;&lt;consumes_customized&gt;false&lt;/consumes_customized&gt;&lt;default_operation_uri/&gt;&lt;enforce_acl/&gt;&lt;http_method&gt;PUT&lt;/http_method&gt;&lt;name&gt;Put record resource&lt;/name&gt;&lt;operation_script&gt;&lt;![CDATA[(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+
+    var body = JSON.parse(request.body.dataString);
+	
+	if(!body.etag){
+		response.setStatus(500);
+		response.setBody({error: 'Missing etag field'});
+		return;
+	}
+	
+	var record = new GlideRecordSecure(request.pathParams.table);
+	if(!record.get(body.id)){
+		response.setStatus(404);
+		return;
+	}
+	
+	if(record.sys_updated_on.toString() != body.etag){
+		response.setStatus(409); //client is out of date
+		return;
+	}
+	
+	var updated = false;
+	for(var key in body.fields){
+		var field = body.fields[key];
+		if((record[key] + '') != field){
+			record[key] = field;
+			updated = true;
+		}
+	}
+	
+	if(updated){
+		record.update();
+	}
+	
+	var r = {
+		id: record.sys_id + '',
+		table: record.sys_class_name + '',
+		etag: record.sys_updated_on.toString(),
+		name: record.getDisplayValue(),
+		fields: {}
+	};
+	
+	for(var k in body.fields){
+		r.fields[k] = record[k] + '';
+	}
+	
+	response.setStatus(updated ? 200 : 304);
+	response.setBody(r);
+})(request, response);]]&gt;&lt;/operation_script&gt;&lt;operation_uri&gt;/api/11527/dev_integration/{table}/{id}&lt;/operation_uri&gt;&lt;produces&gt;application/json,application/xml,text/xml&lt;/produces&gt;&lt;produces_customized&gt;false&lt;/produces_customized&gt;&lt;relative_path&gt;/{table}/{id}&lt;/relative_path&gt;&lt;request_example/&gt;&lt;requires_acl_authorization&gt;false&lt;/requires_acl_authorization&gt;&lt;requires_authentication&gt;true&lt;/requires_authentication&gt;&lt;short_description/&gt;&lt;sys_class_name&gt;sys_ws_operation&lt;/sys_class_name&gt;&lt;sys_created_by&gt;admin&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2016-05-31 23:42:37&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;true&lt;/sys_customer_update&gt;&lt;sys_id&gt;7b74d62cdb3712001a1ada11cf9619eb&lt;/sys_id&gt;&lt;sys_mod_count&gt;9&lt;/sys_mod_count&gt;&lt;sys_name&gt;Put record resource&lt;/sys_name&gt;&lt;sys_package display_value="Global" source="global"&gt;global&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Global"&gt;global&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_ws_operation_7b74d62cdb3712001a1ada11cf9619eb&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;admin&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2016-06-01 06:06:02&lt;/sys_updated_on&gt;&lt;web_service_definition display_value="DEV Integration"&gt;d404162cdb3712001a1ada11cf9619ba&lt;/web_service_definition&gt;&lt;web_service_version/&gt;&lt;/sys_ws_operation&gt;&lt;/record_update&gt;</payload>
+<remote_update_set display_value="Dev Integration REST API">5311f360dbb712001a1ada11cf96194c</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2016-06-01 06:26:15</sys_created_on>
+<sys_id>5711f360dbb712001a1ada11cf96194c</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2016-06-01 06:26:15</sys_updated_on>
+<table/>
+<target_name>Put record resource</target_name>
+<type>Scripted REST Resource</type>
+<update_domain>global</update_domain>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_ws_operation_ca44962cdb3712001a1ada11cf9619e0</name>
+<payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_ws_operation"&gt;&lt;sys_ws_operation action="INSERT_OR_UPDATE"&gt;&lt;active&gt;true&lt;/active&gt;&lt;consumes&gt;application/json,application/xml,text/xml&lt;/consumes&gt;&lt;consumes_customized&gt;false&lt;/consumes_customized&gt;&lt;default_operation_uri/&gt;&lt;enforce_acl/&gt;&lt;http_method&gt;GET&lt;/http_method&gt;&lt;name&gt;Get table schema&lt;/name&gt;&lt;operation_script&gt;&lt;![CDATA[(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+	
+	getJSType = function(n, ed){
+		var t = '';
+		 switch (n) {
+            case "integer":
+            case "float":
+            case "decimal":
+                t = "number";
+				 break;
+            case "boolean":
+                t = "boolean";
+				 break;
+            case "glide_date":
+                t = "IGlideDate";
+				 break;
+            case "glide_date_time":
+                t = "IGlideDateTime";
+				 break;
+            case "glide_time":
+                t = "IGlideTime";
+				 break;
+            case "glide_duration":
+                t = "IGlideDuration";
+				 break;
+            case "password2":
+                t = "IGlideElement";
+				 break;
+            case "reference":
+            case "string":
+            case "domain_id":
+            case "domain_path":
+            case "guid":
+            case "journal":
+            case "journal_input":
+            case "translated_html":
+            case "text":
+            case "script_plain":
+            case "sys_class_name":
+            case "glide_list":
+            case "choice":
+            default:
+                t = "string";
+				 break;
+        }
+		
+		return t;
+	};
+	
+	getDefinition = function(tableName){	
+		var fields = {};
+		
+		var schemaHM = GlideTableDescriptor.get(tableName);
+		var map = schemaHM.getSchema();
+		var keys = map.keySet();
+		var iter = keys.iterator();
+		while (iter.hasNext()) {
+			var o = iter.next();
+			var ed = map.get(o);
+			var dt = ed.getInternalType() + '';
+			var d = { 
+				type: getJSType(dt.toLowerCase(), ed)
+			};
+			
+			if(dt == 'reference'){
+				d.reference = ed.getReference() + '';
+			}
+			fields[o] = d;
+		}
+		return fields;
+	};	
+	
+	getExtendedTables = function(tableName) {
+		var tables = {};
+		
+		var current = new GlideRecord('sys_db_object');
+		current.get('name', tableName);
+		var last = null;
+		var superid;
+		do{
+			if(last != null){
+				last.superclass = current.name + '';
+			}
+			
+			last = {};
+			var name = current.name + '';
+			tables[name] = last;
+			
+			superid = current.super_class;
+		}
+		while(!gs.nil(superid) &amp;&amp; current.get(superid));
+		
+		return tables;
+	};
+	
+	var tables = getExtendedTables(request.pathParams.table);
+	
+	for(var key in tables){
+		var definition = getDefinition(key);
+		tables[key].fields = definition;
+	}
+	
+	response.setHeader('Access-Control-Allow-Origin', '*');
+	response.setBody(tables);
+})(request, response);]]&gt;&lt;/operation_script&gt;&lt;operation_uri&gt;/api/11527/dev_integration/schema/{table}&lt;/operation_uri&gt;&lt;produces&gt;application/json,application/xml,text/xml&lt;/produces&gt;&lt;produces_customized&gt;false&lt;/produces_customized&gt;&lt;relative_path&gt;/schema/{table}&lt;/relative_path&gt;&lt;request_example/&gt;&lt;requires_acl_authorization&gt;false&lt;/requires_acl_authorization&gt;&lt;requires_authentication&gt;true&lt;/requires_authentication&gt;&lt;short_description/&gt;&lt;sys_class_name&gt;sys_ws_operation&lt;/sys_class_name&gt;&lt;sys_created_by&gt;admin&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2016-05-31 23:41:21&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;true&lt;/sys_customer_update&gt;&lt;sys_id&gt;ca44962cdb3712001a1ada11cf9619e0&lt;/sys_id&gt;&lt;sys_mod_count&gt;0&lt;/sys_mod_count&gt;&lt;sys_name&gt;Get table schema&lt;/sys_name&gt;&lt;sys_package display_value="Global" source="global"&gt;global&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Global"&gt;global&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_ws_operation_ca44962cdb3712001a1ada11cf9619e0&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;admin&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2016-05-31 23:41:21&lt;/sys_updated_on&gt;&lt;web_service_definition display_value="DEV Integration"&gt;d404162cdb3712001a1ada11cf9619ba&lt;/web_service_definition&gt;&lt;web_service_version/&gt;&lt;/sys_ws_operation&gt;&lt;/record_update&gt;</payload>
+<remote_update_set display_value="Dev Integration REST API">5311f360dbb712001a1ada11cf96194c</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2016-06-01 06:26:15</sys_created_on>
+<sys_id>9711f360dbb712001a1ada11cf96194c</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2016-06-01 06:26:15</sys_updated_on>
+<table/>
+<target_name>Get table schema</target_name>
+<type>Scripted REST Resource</type>
+<update_domain>global</update_domain>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+<sys_update_xml action="INSERT_OR_UPDATE">
+<action>INSERT_OR_UPDATE</action>
+<application display_value="Global">global</application>
+<category>customer</category>
+<comments/>
+<name>sys_ws_definition_d404162cdb3712001a1ada11cf9619ba</name>
+<payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ws_definition"><sys_ws_definition action="INSERT_OR_UPDATE"><active>true</active><base_uri>/api/11527/dev_integration</base_uri><consumes>application/json,application/xml,text/xml</consumes><consumes_customized>false</consumes_customized><default_version>No active default version</default_version><doc_link/><enforce_acl/><is_versioned>false</is_versioned><name>DEV Integration</name><namespace>11527</namespace><produces>application/json,application/xml,text/xml</produces><produces_customized>false</produces_customized><service_id>dev_integration</service_id><short_description/><sys_class_name>sys_ws_definition</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2016-05-31 23:39:38</sys_created_on><sys_customer_update>true</sys_customer_update><sys_id>d404162cdb3712001a1ada11cf9619ba</sys_id><sys_mod_count>0</sys_mod_count><sys_name>DEV Integration</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Global">global</sys_scope><sys_update_name>sys_ws_definition_d404162cdb3712001a1ada11cf9619ba</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2016-05-31 23:39:38</sys_updated_on></sys_ws_definition></record_update>]]></payload>
+<remote_update_set display_value="Dev Integration REST API">5311f360dbb712001a1ada11cf96194c</remote_update_set>
+<replace_on_upgrade>false</replace_on_upgrade>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2016-06-01 06:26:15</sys_created_on>
+<sys_id>d311f360dbb712001a1ada11cf96194c</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2016-06-01 06:26:15</sys_updated_on>
+<table/>
+<target_name>DEV Integration</target_name>
+<type>Scripted REST API</type>
+<update_domain>global</update_domain>
+<update_set display_value=""/>
+<view/>
+</sys_update_xml>
+</unload>

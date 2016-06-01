@@ -15,7 +15,9 @@ gulp.task('dts', [], function () {
     var promises = [];
     for(var i=0; i < types.length; i++){
         console.log('Generating typing for: ' + types[i]);
-        promises.push(get(sn.uri + sn.dts.resource + types[i]));
+        var uri = sn.uri + sn.dev_integration_endpoint + 'schema/' + types[i];
+        console.log(uri);
+        promises.push(get(uri));
     }
     
     var prom = Q
@@ -148,7 +150,9 @@ function get(uri) {
             url: uri,
             method: 'GET',
             headers: {
+                'Content-Type': 'application/json',
                 'Accept': 'application/json',
+                'Authorization': 'Basic ' + (new Buffer(sn.auth.user + ':' + sn.auth.password)).toString('base64')
             }
         },
         function (err, response, body) {
