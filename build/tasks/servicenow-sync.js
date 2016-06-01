@@ -10,15 +10,15 @@ var request = require('request');
 var Q = require('q');
 var sequence = require('run-sequence')
 
-gulp.task('sn-sync', function(){
-    sequence('sn-pull', 'dts');
+gulp.task('sync', function(){
+    sequence('pull', 'dts');
 });
 
-gulp.task('sn-pull', [], function() {
-    return getAllSysMetaFiles();
+gulp.task('pull', [], function() {
+    return getAllApplicationTypes();
 });
 
-gulp.task('sn-push', ['build'], function() {    
+gulp.task('push', ['build'], function() {    
     return pushAllToServiceNow();
 });
 
@@ -26,6 +26,11 @@ function pushAllToServiceNow() {
     var promises = [];
     
     var mappings = JSON.parse(fs.readFileSync(sn.mapping, 'utf8'));
+    
+    mappings.forEach(item => {
+        
+    })
+    
     
     Object.keys(mappings).forEach(id => {
         var mapping = mappings[id];
@@ -69,64 +74,60 @@ function pushAllToServiceNow() {
     return Q.all(promises);
 }
 
-function getAllSysMetaFiles() {    
-    var uri = sn.uri + '/api/now/table/sys_metadata?sysparm_query=sys_scope=' + sn.application + '^sys_class_nameIN' + Object.keys(sn.types).toString();
-            
-    return Q.when(getFromServiceNow(uri))
-        .then(body => {
-            var result = JSON.parse(body).result;
-            
-            var mappings = {};
-            var promises = [];
-            result.forEach(function(meta){
-                promises.push(getFile(meta.sys_class_name, meta.sys_id, function(savedToPath){
-                    mappings[meta.sys_id] = {
-                        path: savedToPath,
-                        type: meta.sys_class_name
-                    };
-                }));
-            });
-            
-            return Q.all(promises)
-                .then(r => {
-                   fs.writeFileSync(sn.mapping, JSON.stringify(mappings,undefined,3)); 
-                });
-        });
+function getAllApplicationTypes() {  
+    var mappings = [];
+    var promises = [];
+     
+    Object.keys(sn.types).forEach(type => {        
+        var uri = sn.uri + sn.dev_integration_endpoint + 'application/' + sn.application + '/' + type;
+        
+        promises.push(Q.when(getFromServiceNow(uri))
+            .then(body => {
+                var result = JSON.parse(body).result;
+                result.forEach(item => {
+                    var p = writeFile(item);
+                    mappings.push({
+                        id: item.id,
+                        type: item.table,
+                        etag: item.etag,
+                        path: p
+                    });
+                })
+            })
+        );
+    });
+    
+    return Q.all(promises)
+        .then(item => {
+            fs.writeFileSync(sn.mapping, JSON.stringify(mappings, undefined, 3));
+        });   
 }
 
-function getFile(type, id, pathCallback){
-    var uri = sn.uri + '/api/now/table/' + type + '/' + id;
-    return Q.when(getFromServiceNow(uri))
-        .then(body => {
-            var result = JSON.parse(body).result;
-            
-            var typeInfo = sn.types[type];
-            
-            var body = result[typeInfo.ts];
-            var ext = '.ts';
-            if(!body){
-                body = result[typeInfo.js];
-                ext = '.js';
-            }
-            
-            var path = paths.src;
-            
-            if(!fs.existsSync(path)){
-                fs.mkdirSync(path);
-            }
-            
-            path += type;
-            
-            if(!fs.existsSync(path)){
-                fs.mkdirSync(path);
-            }
-            
-            path += '/' + result.name + ext;
-            
-            fs.writeFileSync(path, body);
-            
-            pathCallback(path);
-        });
+function writeFile(appDataItem){
+    var typeInfo = sn.types[appDataItem.table];
+    
+    var body = appDataItem.fields[typeInfo.ts];
+    var ext = '.ts';
+    
+    if(!body){
+        body = appDataItem.fields[typeInfo.js];
+        ext = '.js';
+    }
+    
+    var p = paths.src;
+    if(!fs.existsSync(p)){
+        fs.mkdirSync(p);
+    }
+    p = path.join(p, appDataItem.table);
+    
+    if(!fs.existsSync(p)){
+        fs.mkdirSync(p);
+    }
+    
+    p = path.join(p, (appDataItem.name + ext));
+    fs.writeFileSync(p, body);
+    
+    return p;
 }
 
 function getFromServiceNow(uri){
