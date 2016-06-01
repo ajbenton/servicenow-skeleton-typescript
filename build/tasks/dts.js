@@ -16,7 +16,6 @@ gulp.task('dts', [], function () {
     for(var i=0; i < types.length; i++){
         console.log('Generating typing for: ' + types[i]);
         var uri = sn.uri + sn.dev_integration_endpoint + 'schema/' + types[i];
-        console.log(uri);
         promises.push(get(uri));
     }
     
