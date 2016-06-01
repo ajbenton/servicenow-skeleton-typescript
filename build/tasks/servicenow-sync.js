@@ -164,7 +164,7 @@ function putToServiceNow(uri, body){
 
 function checkAuth(){
     if(!sn.auth.user || !sn.auth.password){
-        throw 'Authentication to ServiceNow is not set for your environment!  Configure snauth.js with your usersname and password';
+        throw 'Authentication to ServiceNow is not set for your environment!  Configure servicenowconfig.js with your usersname and password';
     }
 }
 
