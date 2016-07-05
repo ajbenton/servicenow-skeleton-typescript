@@ -39,15 +39,15 @@ A ServiceNow DTS is maintained at https://github.com/bryceg/servicenow-dts
 ### gulp dts
 Generates a servicenow.d.ts file from the servicenowconfig dts section.  This will scan all .ts files and locate any type references for GlideRecords.
 
-### gulp sn-pull
+### gulp pull
 Syncronizes your environment with the ServiceNow application specified in your config file.  Similar to "git pull"
 
 WARNING: This will overwrite any src files your have not uploaded to SN yet, so be sure to run sn-pull first or prepare for any edited files to be overwritten!
 
-### gulp sn-push
+### gulp push
 Compliles any typescript to javascript and uploads the results to the application
 
-### gulp sn-sync
+### gulp sync
 Runs gulp sn-pull and dts tasks
 
-WARNING: See sn-pull task
+WARNING: See gulp pull task
