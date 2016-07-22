@@ -130,6 +130,9 @@ function getAllApplicationTypes() {
 function writeFile(appDataItem){
     var typeInfo = sn.types[appDataItem.table];
     
+    if(!typeInfo)
+        return;
+    
     var body = appDataItem.fields[typeInfo.ts];
     var ext = '.ts';
     
