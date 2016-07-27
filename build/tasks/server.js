@@ -23,3 +23,14 @@ gulp.task('build', [], function () {
         
     return defer.promise;
 });
+
+// Uncomment out for gulp debugging
+// Replace 'build' with task to debug
+/*
+var taskToDebug = 'push';
+gulp.task('default', [taskToDebug], function(res){
+    //console.log(JSON.stringify(res));
+    res();
+    console.log("Done with default gulp task")
+});
+*/
