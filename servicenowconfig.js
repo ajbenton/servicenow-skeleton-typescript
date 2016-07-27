@@ -4,8 +4,10 @@ module.exports = {
     mapping: 'snsyncmapping.json',
     dev_integration_endpoint: '/api/11527/dev_integration/',
     types: {
-        'sys_script': {js: 'script', ts: 'u_typescript'}, 
-        'sys_script_include': {js: 'script', ts: 'u_typescript'}
+        'sys_script': {js: 'script', ts: 'u_typescript'},
+        'sys_script_include': {js: 'script', ts: 'u_typescript'},
+        'sysauto_script': {js: 'script', ts: 'u_typescript'},
+        'sys_ws_operation': {js: 'operation_script', ts: 'u_typescript'}
     },
     auth: {
         user: '',
