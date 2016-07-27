@@ -1,4 +1,4 @@
-// Copyright © 2015 Avanade, Inc.
+// Copyright 2016 Avanade, Inc.
 
 var gulp = require('gulp');
 var fs = require('fs');
@@ -29,6 +29,9 @@ function pushAllToServiceNow() {
     
     Object.keys(mappings).forEach(key => {
         var item = mappings[key];
+        if(!item.path)
+            return;
+
         var file = item.path;  
         var ext = path.extname(file);
         
@@ -50,14 +53,14 @@ function pushAllToServiceNow() {
         };
         
         switch(ext){
-            case '.ts':
-                var distPath = file.replace(path.normalize(paths.src), path.normalize(paths.dist));
+            case '.ts':                
+                var distPath = file.replace(path.normalize(paths.src), path.normalize(paths.dist));                
                 distPath = distPath.substring(0, distPath.length - ext.length) + '.js';
                 b.fields[sn.types[item.type].js] = fs.readFileSync(distPath, 'utf8');
                 b.fields[sn.types[item.type].ts] = fs.readFileSync(file, 'utf8');
                 break;
             case '.js':
-                b.fields[sn.types[item.type].js] = fs.readFileSync(distPath, 'utf8');
+                b.fields[sn.types[item.type].js] = fs.readFileSync(file, 'utf8');
                 break;
             default:
                 throw 'Unknown file type ' + ext;
@@ -105,7 +108,7 @@ function getAllApplicationTypes() {
             .then(response => {
                 if(response.code == 200){               
                     var result = JSON.parse(response.body).result;
-                    result.forEach(item => {
+                    result.forEach(item => {                                               
                         var p = writeFile(item);
                         mappings[item.id] = {
                             type: item.table,
@@ -129,9 +132,10 @@ function getAllApplicationTypes() {
 
 function writeFile(appDataItem){
     var typeInfo = sn.types[appDataItem.table];
-    
-    if(!typeInfo)
+
+    if(!typeInfo){
         return;
+    }
     
     var body = appDataItem.fields[typeInfo.ts];
     var ext = '.ts';
