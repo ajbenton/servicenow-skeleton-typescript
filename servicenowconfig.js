@@ -14,7 +14,8 @@ module.exports = {
         password: ''
     },
     dts: {
-        path: 'typings/servicenow.d.ts',
+        appdts: 'typings/application.d.ts',
+        sndts: 'typings/servicenow.d.ts',
         refs: [
             'index.d.ts'
         ],

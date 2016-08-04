@@ -52,8 +52,14 @@ function pushAllToServiceNow() {
             fields: {}
         };
 
-        if (item.table == 'sys_app') {
-            b.fields['u_typings'] = fs.readFileSync(item.path, 'utf8');
+        if (item.type == 'sys_app') {
+            if(fs.existsSync(item.path)){
+                b.fields['u_typings'] = fs.readFileSync(item.path, 'utf8');
+            }
+
+            if(fs.existsSync(sn.dts.appdts)){
+                b.fields['u_dts'] = fs.readFileSync(sn.dts.appdts, 'utf8');
+            }
         }
         else {
             switch (ext) {
@@ -67,7 +73,7 @@ function pushAllToServiceNow() {
                     b.fields[sn.types[item.type].js] = fs.readFileSync(file, 'utf8');
                     break;
                 default:
-                    throw 'Unknown file type ' + ext;
+                    throw 'Unknown file type ' + file;
             }
         }
 
@@ -140,9 +146,9 @@ function getAllApplicationTypes() {
                         etag: app.etag,
                         path: 'typings.json'
                     };
-                    if(app.fields.u_typings){
-                        fs.writeFileSync('typings.json', app.fields.u_typings);
-                    }
+
+                    fs.writeFileSync('typings.json', app.fields.u_typings);
+                    fs.writeFileSync(sn.dts.appdts, app.fields.u_dts);
                 }
             }
         }));

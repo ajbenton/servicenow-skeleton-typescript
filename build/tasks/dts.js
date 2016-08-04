@@ -32,7 +32,7 @@ gulp.task('dts', [], function () {
             return merged;
         })
         .then(result => {
-            writeDTS('typings/servicenow.d.ts', result);
+            writeDTS(sn.dts.sndts, result);
         })
         .catch(err => {
             console.error(err);
@@ -101,7 +101,7 @@ function writeDTS(target, definitions){
     
     for(var type in definitions){
         var def = definitions[type];
-        
+
         dts += '\t\texport interface I' + type;
         if(def.superclass){
             dts += ' extends I' + def.superclass;
@@ -113,11 +113,11 @@ function writeDTS(target, definitions){
         
         for(var fieldname in def.fields){
             var fielddef = def.fields[fieldname];
-                        
+
             if(sn.dts.ignoreFields.indexOf(fieldname) == -1 && 
-               !def.superclass || 
-               (definitions.hasOwnProperty(def.superclass) && !definitions[def.superclass].fields.hasOwnProperty(fieldname)))
-            {            
+               (!def.superclass || 
+               (definitions.hasOwnProperty(def.superclass) && !definitions[def.superclass].fields.hasOwnProperty(fieldname))))
+            {      
                 var type = fielddef.type;
                 if(type.match(/IGlide/g)){
                     type = 'sn.Server.' + type;
