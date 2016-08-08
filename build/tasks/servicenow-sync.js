@@ -72,6 +72,9 @@ function pushAllToServiceNow() {
                 case '.js':
                     b.fields[sn.types[item.type].js] = fs.readFileSync(file, 'utf8');
                     break;
+                case '.html':
+                    b.fields[sn.types[item.type].html] = fs.readFileSync(file, 'utf8');
+                    break;
                 default:
                     throw 'Unknown file type ' + file;
             }
@@ -154,7 +157,7 @@ function getAllApplicationTypes() {
         }));
 
     return Q.all(promises)
-        .then(item => {
+        .then(() => {
             fs.writeFileSync(sn.mapping, JSON.stringify(mappings, undefined, 3));
         });
 }
@@ -166,12 +169,23 @@ function writeFile(appDataItem) {
         return;
     }
 
-    var body = appDataItem.fields[typeInfo.ts];
-    var ext = '.ts';
+    var body;
+    var ext;    
+    if (typeInfo.hasOwnProperty('ts') || typeInfo.hasOwnProperty('js')) {
+        body = appDataItem.fields[typeInfo.ts];
+        ext = '.ts';
 
-    if (!body) {
-        body = appDataItem.fields[typeInfo.js];
-        ext = '.js';
+        if (!body) {
+            body = appDataItem.fields[typeInfo.js];
+            ext = '.js';
+        }
+    } else if (typeInfo.hasOwnProperty('html')) {
+        body = appDataItem.fields[typeInfo.html];
+        ext = '.html';
+    }
+
+    if (!body || !ext) {
+        return;
     }
 
     var p = paths.src;
