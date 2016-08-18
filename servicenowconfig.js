@@ -8,7 +8,8 @@ module.exports = {
         'sys_script_include': {js: 'script', ts: 'u_typescript'},
         'sys_ui_macro': {html: 'xml'},
         'sys_ws_operation': {js: 'operation_script', ts: 'u_typescript'},
-        'sysauto_script': {js: 'script', ts: 'u_typescript'}
+        'sysauto_script': {js: 'script', ts: 'u_typescript'},
+        'sys_ui_action': {js: 'script', ts: 'u_typescript'}
     },
     auth: {
         user: '',
