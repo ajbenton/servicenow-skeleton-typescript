@@ -152,6 +152,31 @@ function getAllApplicationTypes() {
 
                     fs.writeFileSync('typings.json', app.fields.u_typings);
                     fs.writeFileSync(sn.dts.appdts, app.fields.u_dts);
+
+                    //write out the references in the index.d.ts file if its not already there                    
+                    var pathToIndex = 'typings/index.d.ts';
+                    var content = fs.readFileSync(pathToIndex, 'utf8');
+                    var write = false;
+
+                    var relativePath = path.relative(path.dirname(pathToIndex), path.dirname(sn.dts.appdts));
+                    var appdtsRegex = new RegExp('path=[\'"]' + path.join(relativePath, path.basename(sn.dts.appdts)) + '[\'"]', 'g');
+
+                    if(!appdtsRegex.test(content)){
+                        content += '\r\n/// <reference path="' + path.join(relativePath, path.basename(sn.dts.appdts)) + '" />';
+                        write = true;
+                    }
+                    
+                    var relativePath = path.relative(path.dirname(pathToIndex), path.dirname(sn.dts.sndts));
+                    var sndtsRegex = new RegExp('path=[\'"]' + path.join(relativePath, path.basename(sn.dts.sndts)) + '[\'"]', 'g');
+
+                    if(!sndtsRegex.test(content)){
+                        content += '\r\n/// <reference path="' + path.join(relativePath, path.basename(sn.dts.sndts)) + '" />';
+                        write = true;
+                    }
+
+                    if(write){
+                        fs.writeFileSync(pathToIndex, content);
+                    }
                 }
             }
         }));
