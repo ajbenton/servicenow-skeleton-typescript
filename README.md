@@ -14,8 +14,8 @@ as well as a scripted rest API for the automatic DTS generator to query schema f
 ## Configure servicenowconfig.js for your application
 - uri = path to your servicenow instance
 - application = sys_id of the ServiceNow scoped application your are developing
--- types['typename'].js = Field on type to set the javascript source too
--- types['typename'].ts = Field on the type to set the typescript source too
+- types['typename'].js = Field on type to set the javascript source too
+- types['typename'].ts = Field on the type to set the typescript source too
 - auth = user and password for running gulp tasks as (Uses basic auth, so needs to be a local account not SSO with priveledges to all types)
 - dts.resource = servicenow path to the scripted rest api that was created for dts generation described earlier.
 
