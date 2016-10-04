@@ -20,14 +20,22 @@ as well as a scripted rest API for the automatic DTS generator to query schema f
 - dts.resource = servicenow path to the scripted rest api that was created for dts generation described earlier.
 
 ## How to use this skeleton for your SN App
-This skeleton project is designed to use your SN dev instance as your source control.  I highly recommend you use the built in source control integration offered in Helsinki when using this.  Since SN natively integrates with GIT, you can extend 
-any tables you are developing with a u_typescript field to store your source so that it gets commited to source control via SN, and you can track changes to those scripts as you normally would via javascript development.
+### Source Control
+Since SN natively integrates with GIT starting in Helsinki, you can extend any tables you are developing with a u_typescript field to store your typescript source so that it gets commited to your repo via SN, and you can track changes to those scripts.
 
-When working on a new business rule or script include, first add it in the servicenow studio editor.  After you save the new item, come back to this project and run "gulp sn-pull", this will scan the entire SN application and create matching files to any items it finds in the application.
-Once the item is listed (example: "src\sys_script\foo.js"), change the extension to .ts and fix any typescript errors you find.  Then run "gulp sn-push" to upload both the transpiled javascript as well as your typescript source back into SN.  You can now commit this change inside SN as you normally would in your development process to save both the typescript and js.  At any time you can delete the src\ folder and run "gulp sn-pull" to re-sync with whats in servicenow!  If you do not wish to use typescript, leave the file as a .js extension and develop as your normally would.
+### Adding a new script include, business rule, or other script file for development
+When working on a new business rule or script include, first add it in the servicenow studio editor.  After you save the new item, come back to this project and run "gulp sn-pull", this will scan the ServiceNow Application for any script files and create them in your development environment under src\[tablename] folder.
 
-As you write your code, any GlideRecord('[table_name]') source you create can be automatically scanned for d.ts generation by using the "gulp dts" task.  This task will scan all .ts files in the src\ folder and detect any GlideRecord references.  If you wish to manually add a reference 
-to a table, then add this to the top of your ts file and comma separate multiple table names:
+Once the item is listed (example: "src\sys_script\foo.js"), change the extension to .ts and convert it to typescript.  When you are ready to upload the changes, run the gulp "push" task to upload both the transpiled javascript as well as your typescript source back into SN.
+
+You should periodically sync or pull the application when working with other developers, to get the latest changes.  WARNING: This will overwrite any file you have in src\ folder with the version found in the ServiceNow application.  Be sure to upload any changes you have first, or save them off separately to re-apply if needed.
+
+You can now commit this change inside SN as you normally would in your development process to save both the typescript and js.  At any time you can delete the src\ folder and run gulp task "sync" to re-sync with whats in servicenow!  If you do not wish to use typescript, leave the file as a .js extension and develop as your normally would.
+
+### DTS Generation
+As you write your code, any GlideRecord('[table_name]') source you create can be automatically scanned for typings generation by running the "gulp dts" task (automatically run by the "sync" task also).  This task will scan all .ts files in the src\ folder and detect any GlideRecord references.  
+
+If you wish to manually add a reference to a table that may not be used via GlideRecord call, then add this to the top of your ts file and comma separate multiple table names:
 ```javsacript
 \\\<dts>tablename1,tablename2</dts>
 ```
