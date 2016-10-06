@@ -15,7 +15,7 @@ gulp.task('sync', function () {
 });
 
 gulp.task('pull', [], function () {
-    return getAllApplicationTypes();
+    return pullAllFromServiceNow();
 });
 
 gulp.task('push', ['build'], function () {
@@ -53,11 +53,11 @@ function pushAllToServiceNow() {
         };
 
         if (item.type == 'sys_app') {
-            if(fs.existsSync(item.path)){
+            if (fs.existsSync(item.path)) {
                 b.fields['u_typings'] = fs.readFileSync(item.path, 'utf8');
             }
 
-            if(fs.existsSync(sn.dts.appdts)){
+            if (fs.existsSync(sn.dts.appdts)) {
                 b.fields['u_dts'] = fs.readFileSync(sn.dts.appdts, 'utf8');
             }
         }
@@ -111,7 +111,7 @@ function pushAllToServiceNow() {
         });
 }
 
-function getAllApplicationTypes() {
+function pullAllFromServiceNow() {
     var mappings = {};
     var promises = [];
 
@@ -153,38 +153,72 @@ function getAllApplicationTypes() {
                     fs.writeFileSync('typings.json', app.fields.u_typings);
                     fs.writeFileSync(sn.dts.appdts, app.fields.u_dts);
 
-                    //write out the references in the index.d.ts file if its not already there                    
-                    var pathToIndex = 'typings/index.d.ts';
-                    var content = fs.readFileSync(pathToIndex, 'utf8');
-                    var write = false;
-
-                    var relativePath = path.relative(path.dirname(pathToIndex), path.dirname(sn.dts.appdts));
-                    var appdtsRegex = new RegExp('path=[\'"]' + path.join(relativePath, path.basename(sn.dts.appdts)) + '[\'"]', 'g');
-
-                    if(!appdtsRegex.test(content)){
-                        content += '\r\n/// <reference path="' + path.join(relativePath, path.basename(sn.dts.appdts)) + '" />';
-                        write = true;
-                    }
-                    
-                    var relativePath = path.relative(path.dirname(pathToIndex), path.dirname(sn.dts.sndts));
-                    var sndtsRegex = new RegExp('path=[\'"]' + path.join(relativePath, path.basename(sn.dts.sndts)) + '[\'"]', 'g');
-
-                    if(!sndtsRegex.test(content)){
-                        content += '\r\n/// <reference path="' + path.join(relativePath, path.basename(sn.dts.sndts)) + '" />';
-                        write = true;
-                    }
-
-                    if(write){
-                        fs.writeFileSync(pathToIndex, content);
-                    }
+                    addReferenceToIndex(sn.dts.appdts);
+                    addReferenceToIndex(sn.dts.sndts);
                 }
             }
         }));
+
+    promises.push(getApplicationRefs(sn.application));
 
     return Q.all(promises)
         .then(() => {
             fs.writeFileSync(sn.mapping, JSON.stringify(mappings, undefined, 3));
         });
+}
+
+function getApplicationRefs(id) {
+
+    return Q.when(getFromServiceNow(sn.uri + sn.dev_integration_endpoint + 'dependencies/application/' + id))
+        .then(response => {
+            var result = JSON.parse(response.body).result;
+
+            Object.keys(result).forEach(key => {
+                var appref = result[key];
+                var dtsPath = 'typings/appdependencies/' + appref.name + '/index.d.ts';
+
+                if (!fs.existsSync(dtsPath)) {
+                    mkdirpSync(path.dirname(dtsPath));
+                }
+
+                fs.writeFileSync(dtsPath, appref.dts);
+                addReferenceToIndex(dtsPath);
+            });
+        });
+}
+
+var mkdirpSync = function (dirpath) {
+    var dirPathNormed = path.normalize(dirpath);
+    var parts = dirPathNormed.split(path.sep);
+    for (var i = 1; i <= parts.length; i++) {
+        var p = path.join.apply(null, parts.slice(0, i));
+        if(!fs.existsSync(p)){
+            fs.mkdirSync(p);
+        }
+    }
+}
+
+function addReferenceToIndex(referencePath) {
+    var pathToIndex = 'typings/index.d.ts';
+    var write = false;
+
+    //Get the path relative to the index file
+    var relativePath = path.relative(path.dirname(pathToIndex), path.dirname(referencePath));
+
+    //Check if the path already exists
+    var regexPath = 'path=[\'"]' + path.join(relativePath, path.basename(referencePath)).replace(/\\/g, '\\\\') + '[\'"]';
+    var appdtsRegex = new RegExp(regexPath, 'g');
+
+    var content = fs.readFileSync(pathToIndex, 'utf8');
+
+    if (!appdtsRegex.test(content)) {
+        content += '\r\n/// <reference path="' + path.join(relativePath, path.basename(referencePath)) + '" />';
+        write = true;
+    }
+
+    if (write) {
+        fs.writeFileSync(pathToIndex, content);
+    }
 }
 
 function writeFile(appDataItem) {
@@ -195,7 +229,7 @@ function writeFile(appDataItem) {
     }
 
     var body;
-    var ext;    
+    var ext;
     if (typeInfo.hasOwnProperty('ts') || typeInfo.hasOwnProperty('js')) {
         body = appDataItem.fields[typeInfo.ts];
         ext = '.ts';
@@ -234,7 +268,7 @@ function getFromServiceNow(uri) {
 }
 
 function putToServiceNow(uri, body) {
-    return invokeServiceNow(uri, 'PUT', body);
+    return invokeServiceNow(uri, 'PUT', body, sn.auth.user, sn.auth.password);
 };
 
 function checkAuth() {
@@ -247,16 +281,23 @@ function invokeServiceNow(uri, method, body, user, password) {
     checkAuth();
 
     var defer = Q.defer();
+
+    var header = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    };
+
+    if (user && password) {
+        console.log('Using auth header');
+        header['Authorization'] = 'Basic ' + (new Buffer(user + ':' + password)).toString('base64');
+    }
+
     request(
         {
             url: uri,
             method: method,
             body: body,
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': 'Basic ' + (new Buffer(sn.auth.user + ':' + sn.auth.password)).toString('base64')
-            }
+            headers: header
         },
         function (err, response, body) {
             if (err) {
