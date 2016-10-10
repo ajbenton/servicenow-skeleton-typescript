@@ -2,9 +2,11 @@
 
 ## Initial Project Setup
 ### Node Project Setup
-- npm install servicenow-dev-skeleton
-- node_modules\.bin\skeleton init
-- typings install
+```bash
+npm install servicenow-dev-skeleton
+node_modules\.bin\skeleton init
+typings install
+```
 
 ### Configure servicenowconfig.js for your application
 - uri = path to your servicenow instance
@@ -44,8 +46,11 @@ A ServiceNow DTS is maintained at https://github.com/bryceg/servicenow-dts
 
 ## Adding new tables for development
 Configure servicenowconfig types variable with the new servicenow types:
-- types['typename'].js = Field on type to set the javascript source too
-- types['typename'].ts = Field on the type to set the typescript source too
+```javascript
+ types: {
+   my_new_type: {js: 'js_field_name', ts: 'typescript_field_name'}
+ }
+```
 
 ## Gulp Tasks Usage
 
