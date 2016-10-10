@@ -3,9 +3,8 @@
 var gulp = require('gulp');
 var fs = require('fs');
 var paths = require('../paths');
-var file = require('file');
 var path = require('path');
-var sn = require('../../servicenowconfig');
+var sn = require(path.join(process.cwd(), 'servicenowconfig'));
 var request = require('request');
 var Q = require('q');
 var sequence = require('run-sequence')

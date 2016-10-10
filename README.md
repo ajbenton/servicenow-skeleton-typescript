@@ -1,25 +1,25 @@
 # servicenow-skeleton-typescript
 
-## Initial Setup
-- npm install
-- npm install typings -g --save-dev
+## Initial Project Setup
+### Node Project Setup
+- npm install servicenow-dev-skeleton
+- node_modules\.bin\skeleton init
+- typings install
 
-## Configuring your ServiceNow dev instance to work with this skeleton project
+### Configure servicenowconfig.js for your application
+- uri = path to your servicenow instance
+- application = sys_id of the ServiceNow scoped application your are developing
+- auth = user and password for running gulp tasks as (Uses basic auth, so needs to be a local account not SSO with priveledges to all types)
+
+## How to use this skeleton for your SN App
+
+### Configuring your ServiceNow dev instance to work with this skeleton project
 There are two update sets that are needed for this project to work with your dev instances.  It relies on a u_typescript field added to all tables that you will be writing typescript for (business rules, script includes, etc), 
 as well as a scripted rest API for the automatic DTS generator to query schema for any tables it finds in your source files.  Neither of these update sets (or any other u_typescript fields) should move beyond your dev instances!
 
 - Import the update set in integration\typescript_integration_udpate_set.xml  This adds a u_typescript field to the sys_script and sys_script_include tables for storing the typescript.
 - The automatic dts generation requires a SN rest endpoint to query for the table schemas it finds in your ts files.  import the update set xml integration\restschema_update_set.xml (only works in Geneva or later).
 
-## Configure servicenowconfig.js for your application
-- uri = path to your servicenow instance
-- application = sys_id of the ServiceNow scoped application your are developing
-- types['typename'].js = Field on type to set the javascript source too
-- types['typename'].ts = Field on the type to set the typescript source too
-- auth = user and password for running gulp tasks as (Uses basic auth, so needs to be a local account not SSO with priveledges to all types)
-- dts.resource = servicenow path to the scripted rest api that was created for dts generation described earlier.
-
-## How to use this skeleton for your SN App
 ### Source Control
 Since SN natively integrates with GIT starting in Helsinki, you can extend any tables you are developing with a u_typescript field to store your typescript source so that it gets commited to your repo via SN, and you can track changes to those scripts.
 
@@ -41,6 +41,11 @@ If you wish to manually add a reference to a table that may not be used via Glid
 ```
 
 A ServiceNow DTS is maintained at https://github.com/bryceg/servicenow-dts
+
+## Adding new tables for development
+Configure servicenowconfig types variable with the new servicenow types:
+- types['typename'].js = Field on type to set the javascript source too
+- types['typename'].ts = Field on the type to set the typescript source too
 
 ## Gulp Tasks Usage
 

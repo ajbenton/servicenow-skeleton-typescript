@@ -1,0 +1,8 @@
+dist/
+src/
+typings/
+integration/
+.vscode/
+snsyncmapping.json
+.gitignore
+gulpfile.js
