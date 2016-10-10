@@ -267,6 +267,7 @@ function getFromServiceNow(uri) {
 }
 
 function putToServiceNow(uri, body) {
+    checkAuth();
     return invokeServiceNow(uri, 'PUT', body, sn.auth.user, sn.auth.password);
 };
 
@@ -277,8 +278,6 @@ function checkAuth() {
 }
 
 function invokeServiceNow(uri, method, body, user, password) {
-    checkAuth();
-
     var defer = Q.defer();
 
     var header = {
@@ -287,7 +286,6 @@ function invokeServiceNow(uri, method, body, user, password) {
     };
 
     if (user && password) {
-        console.log('Using auth header');
         header['Authorization'] = 'Basic ' + (new Buffer(user + ':' + password)).toString('base64');
     }
 
