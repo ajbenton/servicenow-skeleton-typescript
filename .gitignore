@@ -3,3 +3,4 @@ dist/
 src/
 typings/
 snsyncmapping.json
+.env

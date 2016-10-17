@@ -1,4 +1,5 @@
-// Copyright © 2015 Avanade, Inc.
+// Copyright © 2016 Avanade, Inc.
+require('dotenv').config()
 
 var gulp = require("gulp");
 var fs = require('fs');
@@ -10,35 +11,21 @@ var sn = require(path.join(process.cwd(), 'servicenowconfig'));
 var Q = require("q");
 
 gulp.task('dts', [], function () {
-    var types = getAllTypes();
-    
-    var promises = [];
-    for(var i=0; i < types.length; i++){
-        console.log('Generating typing for: ' + types[i]);
-        var uri = sn.uri + sn.dev_integration_endpoint + 'schema/' + types[i];
-        promises.push(get(uri));
-    }
-    
-    var prom = Q
-        .all(promises)
-        .then(results => {
-            var merged = {};
-            for(var i=0; i < results.length; i++){
-                var types = results[i];
-                for(var key in types){
-                    merged[key] = types[key];
-                }
-            }
-            return merged;
-        })
-        .then(result => {
-            writeDTS(sn.dts.sndts, result);
+    checkUserSettings();
+    var body = {
+        tables: getAllTypes()
+    };
+
+    console.log('Generating types for: ' + body.tables);
+
+    return Q
+        .when(invokeServiceNow(sn.uri + '/api/avana/dev_integration/schema', 'POST', JSON.stringify(body)))
+        .then(response => {
+            writeDTS(sn.dts.sndts, response);
         })
         .catch(err => {
-            console.error(err);
+            console.error('DTS Gen Error: ' + err);
         });
-    
-    return prom;
 });
 
 function getAllTypes(){
@@ -142,21 +129,35 @@ function writeDTS(target, definitions){
     console.log('DTS saved to: ' + target);
 }
 
-function get(uri) {
+function checkUserSettings() {
+    if (!process.env.SN_USER || !process.env.SN_PASSWORD) {
+        if (!fs.existsSync('.env')) {
+            fs.writeFile('.env', 'SN_USER=\r\nSN_PASSWORD=');
+        }
+
+        console.error("ERROR: SN_USER and/or SN_PASSWORD env variables are not set!  Please update your .env file with your ServiceNow basic auth credentials!");
+        return false;
+    }
+
+    return true;
+}
+
+function invokeServiceNow(uri, method, body) {
     var defer = Q.defer();
     request(
         {
             url: uri,
-            method: 'GET',
+            method: method,
+            body: body,
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                //'Authorization': 'Basic ' + (new Buffer(sn.auth.user + ':' + sn.auth.password)).toString('base64')
+                'Authorization': 'Basic ' + (new Buffer(process.env.SN_USER + ':' + process.env.SN_PASSWORD)).toString('base64')
             }
         },
-        function (err, response, body) {
+        function (err, response, b) {
             if (!err && response.statusCode == 200) {
-                defer.resolve(JSON.parse(body).result);
+                defer.resolve(JSON.parse(b).result);
             }
             else if(err){
                 defer.reject(err);

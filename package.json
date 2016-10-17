@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/bryceg/servicenow-skeleton-typescript#readme",
   "dependencies": {
+    "dotenv": "^2.0.0",
     "file": "^0.2.2",
     "gulp": "^3.9.1",
     "gulp-typescript": "^2.14.1",

@@ -2,7 +2,6 @@ module.exports = {
     uri: 'https://[INSTANCE].service-now.com',
     application: '[APPLICATION_SYS_ID]',
     mapping: 'snsyncmapping.json',
-    dev_integration_endpoint: '/api/11527/dev_integration/',
     types: {
         'sys_script': {js: 'script', ts: 'u_typescript'},
         'sys_script_include': {js: 'script', ts: 'u_typescript'},
@@ -10,10 +9,6 @@ module.exports = {
         'sys_ws_operation': {js: 'operation_script', ts: 'u_typescript'},
         'sysauto_script': {js: 'script', ts: 'u_typescript'},
         'sys_ui_action': {js: 'script', ts: 'u_typescript'}
-    },
-    auth: {
-        user: '',
-        password: ''
     },
     dts: {
         appdts: 'typings/application.d.ts',

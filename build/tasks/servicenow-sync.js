@@ -1,5 +1,7 @@
 // Copyright 2016 Avanade, Inc.
 
+require('dotenv').config()
+
 var gulp = require('gulp');
 var fs = require('fs');
 var paths = require('../paths');
@@ -7,7 +9,7 @@ var path = require('path');
 var sn = require(path.join(process.cwd(), 'servicenowconfig'));
 var request = require('request');
 var Q = require('q');
-var sequence = require('run-sequence')
+var sequence = require('run-sequence');
 
 gulp.task('sync', function () {
     sequence('pull', 'dts');
@@ -17,12 +19,16 @@ gulp.task('pull', [], function () {
     return pullAllFromServiceNow();
 });
 
-gulp.task('push', ['build'], function () {
+gulp.task('default', ['build'], function () {
     return pushAllToServiceNow();
 });
 
 function pushAllToServiceNow() {
-    var promises = [];
+    if (!checkUserSettings()) {
+        return;
+    }
+
+    var upload = {};
 
     var mappings = JSON.parse(fs.readFileSync(sn.mapping, 'utf8'));
 
@@ -79,88 +85,85 @@ function pushAllToServiceNow() {
             }
         }
 
-        var uri = sn.uri + sn.dev_integration_endpoint + '/' + item.type + '/' + key;
-
-        var json = JSON.stringify(b);
-
-        promises.push(
-            putToServiceNow(uri, json)
-                .then(response => {
-                    if (response.code == 200) {
-                        var d = JSON.parse(response.body).result;
-                        mappings[d.id].etag = d.etag;
-                        console.log(d.name + ' was updated');
-                    }
-                    else if (response.code == 409) {
-                        console.warn("WARN: " + item.path + ' is out of sync, run "gulp pull"!');
-                    }
-                    else if (response.code == 304) {
-                        //unmodified
-                    }
-                    else {
-                        console.error(response.code + ': ' + response.body);
-                    }
-                })
-        );
+        upload[key] = b;
     });
 
-    return Q.all(promises)
-        .then(() => {
-            fs.writeFileSync(sn.mapping, JSON.stringify(mappings, undefined, 3));
+    return Q
+        .when(putToServiceNow(sn.uri + '/api/avana/dev_integration/application/' + sn.application + '/files', JSON.stringify(upload)))
+        .then(response => {
+            if (response.code == 200) {
+                var d = JSON.parse(response.body).result;
+                Object.keys(d).forEach(item => {
+                    console.log(item.name + ' was updated');
+                    mappings[key].etag = item.etag;
+                });
+
+                fs.writeFileSync(sn.mapping, JSON.stringify(mappings, undefined, 3));
+            }
         });
 }
 
 function pullAllFromServiceNow() {
+    if (!checkUserSettings()) {
+        return;
+    }
+
     var mappings = {};
+
+    if (fs.existsSync(sn.mapping)) {
+        mappings = JSON.parse(fs.readFileSync(sn.mapping, 'utf8'));
+    }
+
     var promises = [];
 
-    Object.keys(sn.types).forEach(type => {
-        var uri = sn.uri + sn.dev_integration_endpoint + 'application/' + sn.application + '/' + type;
+    var body = JSON.stringify({ files: Object.keys(sn.types) });
+    var uri = sn.uri + '/api/avana/dev_integration/application/' + sn.application + '/files';
 
-        promises.push(Q.when(getFromServiceNow(uri))
-            .then(response => {
-                if (response.code == 200) {
-                    var result = JSON.parse(response.body).result;
-                    result.forEach(item => {
-                        var p = writeFile(item);
-                        mappings[item.id] = {
-                            type: item.table,
-                            etag: item.etag,
-                            path: p
-                        };
-                    });
-                }
-                else {
-                    throw 'GET ERROR (' + response.code + '): ' + response.body;
-                }
-            })
-        );
-    });
-
-    promises.push(Q.when(getFromServiceNow(sn.uri + sn.dev_integration_endpoint + 'application/' + sn.application + '/sys_app'))
+    var p1 = Q.when(invokeServiceNow(uri, 'POST', body))
         .then(response => {
-            var result = JSON.parse(response.body).result;
-            for (var i = 0; i < result.length; i++) {
-                var app = result[i];
-                if (app.id == sn.application) {
+            if (response.code == 200) {
+                var result = JSON.parse(response.body).result;
+
+                if (!mappings.hasOwnProperty(result.sys_app.id) ||
+                    (mappings.hasOwnProperty(result.sys_app.id) && mappings[result.sys_app.id].etag != result.sys_app.etag)) {
+
+                    console.log('Updating application typings files');
+                    //Write the application details
                     mappings[sn.application] = {
                         type: 'sys_app',
-                        etag: app.etag,
+                        etag: result.sys_app.etag,
                         path: 'typings.json'
                     };
 
-                    fs.writeFileSync('typings.json', app.fields.u_typings);
-                    fs.writeFileSync(sn.dts.appdts, app.fields.u_dts);
+                    fs.writeFileSync('typings.json', result.sys_app.fields.u_typings);
+                    fs.writeFileSync(sn.dts.appdts, result.sys_app.fields.u_dts);
 
                     addReferenceToIndex(sn.dts.appdts);
                     addReferenceToIndex(sn.dts.sndts);
                 }
+
+                Object.keys(result.files).forEach(key => {
+                    var typeFiles = result.files[key];
+
+                    typeFiles.forEach(t => {
+                        //Only update the file if the server version has changed from last sync
+                        if (!mappings.hasOwnProperty(t.id) || (mappings.hasOwnProperty(t.id) && mappings[t.id].etag != t.etag)) {
+                            console.log('Updated: ' + t.table + '\\' + t.name);
+                            var p = writeFile(t);
+                            mappings[t.id] = {
+                                type: t.table,
+                                etag: t.etag,
+                                path: p
+                            };
+                        }
+                    });
+                })
             }
-        }));
+        });
 
-    promises.push(getApplicationRefs(sn.application));
+    var p2 = getApplicationRefs(sn.application);
 
-    return Q.all(promises)
+    return Q.all([p1, p2])
         .then(() => {
             fs.writeFileSync(sn.mapping, JSON.stringify(mappings, undefined, 3));
         });
@@ -168,7 +171,7 @@ function pullAllFromServiceNow() {
 
 function getApplicationRefs(id) {
 
-    return Q.when(getFromServiceNow(sn.uri + sn.dev_integration_endpoint + 'dependencies/application/' + id))
+    return Q.when(getFromServiceNow(sn.uri + '/api/avana/dev_integration/application/' + id + '/dependencies'))
         .then(response => {
             var result = JSON.parse(response.body).result;
 
@@ -186,12 +189,25 @@ function getApplicationRefs(id) {
         });
 }
 
-var mkdirpSync = function (dirpath) {
+function checkUserSettings() {
+    if (!process.env.SN_USER || !process.env.SN_PASSWORD) {
+        if (!fs.existsSync('.env')) {
+            fs.writeFile('.env', 'SN_USER=\r\nSN_PASSWORD=');
+        }
+
+        console.error("ERROR: SN_USER and/or SN_PASSWORD env variables are not set!  Please update your .env file with your ServiceNow basic auth credentials!");
+        return false;
+    }
+
+    return true;
+}
+
+function mkdirpSync(dirpath) {
     var dirPathNormed = path.normalize(dirpath);
     var parts = dirPathNormed.split(path.sep);
     for (var i = 1; i <= parts.length; i++) {
         var p = path.join.apply(null, parts.slice(0, i));
-        if(!fs.existsSync(p)){
+        if (!fs.existsSync(p)) {
             fs.mkdirSync(p);
         }
     }
@@ -267,27 +283,17 @@ function getFromServiceNow(uri) {
 }
 
 function putToServiceNow(uri, body) {
-    checkAuth();
-    return invokeServiceNow(uri, 'PUT', body, sn.auth.user, sn.auth.password);
+    return invokeServiceNow(uri, 'PUT', body);
 };
 
-function checkAuth() {
-    if (!sn.auth.user || !sn.auth.password) {
-        throw 'Authentication to ServiceNow is not set for your environment!  Configure servicenowconfig.js with your usersname and password';
-    }
-}
-
-function invokeServiceNow(uri, method, body, user, password) {
+function invokeServiceNow(uri, method, body) {
     var defer = Q.defer();
 
     var header = {
         'Content-Type': 'application/json',
-        'Accept': 'application/json'
+        'Accept': 'application/json',
+        'Authorization': 'Basic ' + (new Buffer(process.env.SN_USER + ':' + process.env.SN_PASSWORD)).toString('base64')
     };
-
-    if (user && password) {
-        header['Authorization'] = 'Basic ' + (new Buffer(user + ':' + password)).toString('base64');
-    }
 
     request(
         {
