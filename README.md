@@ -11,7 +11,10 @@ typings install
 ### Configure servicenowconfig.js for your application
 - uri = path to your servicenow instance
 - application = sys_id of the ServiceNow scoped application your are developing
-- auth = user and password for running gulp tasks as (Uses basic auth, so needs to be a local account not SSO with priveledges to all types)
+
+### Set your personal username and password for ServiceNow authentication
+Attempt to run "gulp pull" task, if your .env file is not set up correctly this task will warn you can create the file.
+In the .env file, set your ServiceNow credentials.
 
 ## How to use this skeleton for your SN App
 
