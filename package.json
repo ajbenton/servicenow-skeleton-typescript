@@ -1,7 +1,7 @@
 {
   "name": "servicenow-dev-skeleton",
-  "version": "1.2.1",
-  "description": "- npm install\r - npm install typings -g --save-dev",
+  "version": "1.2.2",
+  "description": "Skeleton project for Helsinki typescript development",
   "main": "gulpfile.js",
   "author": "Bryce Godfrey",
   "license": "ISC",
