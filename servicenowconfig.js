@@ -1,6 +1,6 @@
 module.exports = {
     uri: 'https://[INSTANCE].service-now.com',
-    application: '[APPLICATION_SYS_ID]',
+    application: '[APPLICATION_ID]',
     mapping: 'snsyncmapping.json',
     types: {
         'sys_script': {js: 'script', ts: 'u_typescript'},

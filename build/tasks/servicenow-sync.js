@@ -1,6 +1,8 @@
-// Copyright 2016 Avanade, Inc.
+var fs = require('fs');
 
-require('dotenv').config()
+if(fs.existsSync('.env')){
+    require('dotenv').config()
+}
 
 var gulp = require('gulp');
 var fs = require('fs');
@@ -19,7 +21,7 @@ gulp.task('pull', [], function () {
     return pullAllFromServiceNow();
 });
 
-gulp.task('default', ['build'], function () {
+gulp.task('push', ['build'], function () {
     return pushAllToServiceNow();
 });
 
@@ -93,9 +95,15 @@ function pushAllToServiceNow() {
         .then(response => {
             if (response.code == 200) {
                 var d = JSON.parse(response.body).result;
-                Object.keys(d).forEach(item => {
-                    console.log(item.name + ' was updated');
-                    mappings[key].etag = item.etag;
+                Object.keys(d).forEach(key => {
+                    var item = d[key];
+                    if(item.etag_outofdate){
+                        console.warn(item.table + '\\' + item.name + ' is out of date! Use gulp pull to syncronize with server');
+                    }
+                    else if(item.updated){
+                        console.info(item.table + '\\' + item.name + ' was updated');
+                        mappings[key].etag = item.etag;
+                    }
                 });
 
                 fs.writeFileSync(sn.mapping, JSON.stringify(mappings, undefined, 3));

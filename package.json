@@ -1,6 +1,6 @@
 {
   "name": "servicenow-dev-skeleton",
-  "version": "1.1.2",
+  "version": "1.2.1",
   "description": "- npm install\r - npm install typings -g --save-dev",
   "main": "gulpfile.js",
   "author": "Bryce Godfrey",

@@ -1,5 +1,8 @@
-// Copyright © 2016 Avanade, Inc.
-require('dotenv').config()
+var fs = require('fs');
+
+if(fs.existsSync('.env')){
+    require('dotenv').config()
+}
 
 var gulp = require("gulp");
 var fs = require('fs');
