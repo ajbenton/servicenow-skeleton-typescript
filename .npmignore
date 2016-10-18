@@ -6,3 +6,4 @@ integration/
 snsyncmapping.json
 .gitignore
 gulpfile.js
+.env
