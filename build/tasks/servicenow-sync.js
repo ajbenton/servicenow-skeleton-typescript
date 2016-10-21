@@ -17,7 +17,7 @@ gulp.task('sync', function () {
     sequence('pull', 'dts');
 });
 
-gulp.task('pull', [], function () {
+gulp.task('default', [], function () {
     return pullAllFromServiceNow();
 });
 
@@ -251,6 +251,32 @@ function writeFile(appDataItem) {
         return;
     }
 
+    var handleType = function(fieldName, rootPath, fileName){
+        var prop = typeInfo[fieldName];
+        var content = appDataItem.fields[fieldName];
+        var ext = prop.type;
+
+        if(prop.ts_field && appDataItem[prop.ts_field]){
+            content = appDataItem.fields[prop.ts_field];
+            ext = 'ts';
+        }
+        
+        var filePath = path.join(rootPath, (fileName + '.' + ext));
+        mkdirpSync(path.dirname(filePath), content);
+        fs.writeFileSync(filePath, content);
+    }
+
+    var fieldKeys = Object.keys(typeInfo);
+    if(fieldKeys.length == 1){
+        var field = fieldKeys[0];  
+        handleType(field, path.join(paths.src, appDataItem.table), appDataItem.name);    
+    }
+    else {
+        fieldKeys.forEach(key => {
+            handleType(key, path.join(paths.src, appDataItem.table, appDataItem.name), key);
+        });
+    }
+/*
     var body;
     var ext;
     if (typeInfo.hasOwnProperty('ts') || typeInfo.hasOwnProperty('js')) {
@@ -284,6 +310,7 @@ function writeFile(appDataItem) {
     fs.writeFileSync(p, body);
 
     return p;
+    */
 }
 
 function getFromServiceNow(uri) {

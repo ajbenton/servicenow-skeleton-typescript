@@ -3,12 +3,29 @@ module.exports = {
     application: '[APPLICATION_ID]',
     mapping: 'snsyncmapping.json',
     types: {
-        'sys_script': {js: 'script', ts: 'u_typescript'},
-        'sys_script_include': {js: 'script', ts: 'u_typescript'},
-        'sys_ui_macro': {html: 'xml'},
-        'sys_ws_operation': {js: 'operation_script', ts: 'u_typescript'},
-        'sysauto_script': {js: 'script', ts: 'u_typescript'},
-        'sys_ui_action': {js: 'script', ts: 'u_typescript'}
+        'sys_script': {
+            script: { type: 'js', ts_field: 'u_typescript' }
+        },
+        'sys_script_include': {
+            script: { type: 'js', ts_field: 'u_typescript' }
+        },
+        'sys_ui_macro': {
+            xml: { type: 'html' }
+        },
+        'sys_ws_operation': {
+            operation_script: { type: 'js', ts_field: 'u_typescript' }
+        },
+        'sysauto_script': {
+            script: { type: 'js', ts_field: 'u_typescript' }
+        },
+        'sys_ui_action': {
+            script: { type: 'js', ts_field: 'u_typescript' }
+        },
+        'sys_ui_page': {
+            html: { type: 'html' },
+            processing_script: { type: 'js', ts_field: 'u_processing_script_typescript' },
+            client_script: { type: 'js', ts_field: 'u_client_script_typescript' }
+        }
     },
     dts: {
         appdts: 'typings/application.d.ts',
