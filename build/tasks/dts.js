@@ -53,12 +53,12 @@ function getAllTypes(){
 
 function getTypesFromFile(path){
     var content = fs.readFileSync(path, 'utf8');
-    
-    var regex = /GlideRecord\(['"]([\w-]+)['"]\)/g;
+        
+    var regex = /GlideRecord(Secure)?\(['"]([\w-]+)['"]\)/g;
     var types = [];
     
     while(match = regex.exec(content)){
-        types.push(match[1]);
+        types.push(match[2]);
     }
     
     regex = /\/\/\/<dts>([\w,-]+)<\/dts>/g;
