@@ -34,58 +34,45 @@ function pushAllToServiceNow() {
 
     var mappings = JSON.parse(fs.readFileSync(sn.mapping, 'utf8'));
 
-    Object.keys(mappings).forEach(key => {
-        var item = mappings[key];
-        if (!item.path)
-            return;
-
-        var file = item.path;
-        var ext = path.extname(file);
-
-        if (!fs.existsSync(file)) {
-            if (ext == '.js') {
-                file = file.substring(0, file.length - ext.length) + '.ts';
-                ext = '.ts';
-                if (!fs.existsSync(file)) {
-                    throw 'Unable to find mapping with either .js or .ts extension: ' + file;
-                }
-            }
-        }
-
+    Object.keys(mappings).forEach(id => {
+        var item = mappings[id];
+        
         var b = {
-            id: key,
+            id: id,
             etag: item.etag,
             table: item.type,
             fields: {}
         };
 
-        if (item.type == 'sys_app') {
-            if (fs.existsSync(item.path)) {
-                b.fields['u_typings'] = fs.readFileSync(item.path, 'utf8');
+        Object.keys(item.fields).forEach(key => {
+            var filePath = item.fields[key];
+            var ext = path.extname(filePath);
+
+            if(!fs.existsSync(filePath)){
+                if(ext == '.js'){
+                    filePath = filePath.substring(0, file.length - ext.length) + '.ts';
+                    ext = '.ts';
+                    if(!fs.existsSync(filePath)){
+                        throw 'Unable to find mapping with either a .js or .ts extension' + filePath;
+                    }
+                }
             }
 
-            if (fs.existsSync(sn.dts.appdts)) {
-                b.fields['u_dts'] = fs.readFileSync(sn.dts.appdts, 'utf8');
-            }
-        }
-        else {
             switch (ext) {
                 case '.ts':
                     var distPath = file.replace(path.normalize(paths.src), path.normalize(paths.dist));
                     distPath = distPath.substring(0, distPath.length - ext.length) + '.js';
-                    b.fields[sn.types[item.type].js] = fs.readFileSync(distPath, 'utf8');
-                    b.fields[sn.types[item.type].ts] = fs.readFileSync(file, 'utf8');
-                    break;
-                case '.js':
-                    b.fields[sn.types[item.type].js] = fs.readFileSync(file, 'utf8');
-                    break;
-                case '.html':
-                    b.fields[sn.types[item.type].html] = fs.readFileSync(file, 'utf8');
+                    if(!fs.existsSync(distPath)){
+                        throw 'Typescript output file was not found: ' + distPath;
+                    }
+                    b.fields[key] = fs.readFileSync(distPath, 'utf8');
+                    b.fields[key] = fs.readFileSync(file, 'utf8');
                     break;
                 default:
-                    throw 'Unknown file type ' + file;
+                    b.fields[key] = fs.readFileSync(file, 'utf8');
+                    break;
             }
-        }
+        });
 
         upload[key] = b;
     });
@@ -140,7 +127,10 @@ function pullAllFromServiceNow() {
                     mappings[sn.application] = {
                         type: 'sys_app',
                         etag: result.sys_app.etag,
-                        path: 'typings.json'
+                        fields: {
+                            u_typings: 'typings.json',
+                            u_dts: sn.dts.appdts
+                        }
                     };
 
                     fs.writeFileSync('typings.json', result.sys_app.fields.u_typings);
@@ -161,7 +151,7 @@ function pullAllFromServiceNow() {
                             mappings[t.id] = {
                                 type: t.table,
                                 etag: t.etag,
-                                path: p
+                                fields: p
                             };
                         }
                     });
@@ -246,6 +236,7 @@ function addReferenceToIndex(referencePath) {
 
 function writeFile(appDataItem) {
     var typeInfo = sn.types[appDataItem.table];
+    var typePaths = {};
 
     if (!typeInfo) {
         return;
@@ -256,7 +247,7 @@ function writeFile(appDataItem) {
         var content = appDataItem.fields[fieldName];
         var ext = prop.type;
 
-        if(prop.ts_field && appDataItem[prop.ts_field]){
+        if(prop.ts_field && appDataItem.fields[prop.ts_field]){
             content = appDataItem.fields[prop.ts_field];
             ext = 'ts';
         }
@@ -264,53 +255,21 @@ function writeFile(appDataItem) {
         var filePath = path.join(rootPath, (fileName + '.' + ext));
         mkdirpSync(path.dirname(filePath), content);
         fs.writeFileSync(filePath, content);
+        return filePath;
     }
 
     var fieldKeys = Object.keys(typeInfo);
     if(fieldKeys.length == 1){
         var field = fieldKeys[0];  
-        handleType(field, path.join(paths.src, appDataItem.table), appDataItem.name);    
+        typePaths[field] = handleType(field, path.join(paths.src, appDataItem.table), appDataItem.name);
     }
     else {
         fieldKeys.forEach(key => {
-            handleType(key, path.join(paths.src, appDataItem.table, appDataItem.name), key);
+            typePaths[key] = handleType(key, path.join(paths.src, appDataItem.table, appDataItem.name), key);
         });
     }
-/*
-    var body;
-    var ext;
-    if (typeInfo.hasOwnProperty('ts') || typeInfo.hasOwnProperty('js')) {
-        body = appDataItem.fields[typeInfo.ts];
-        ext = '.ts';
-
-        if (!body) {
-            body = appDataItem.fields[typeInfo.js];
-            ext = '.js';
-        }
-    } else if (typeInfo.hasOwnProperty('html')) {
-        body = appDataItem.fields[typeInfo.html];
-        ext = '.html';
-    }
-
-    if (!body || !ext) {
-        return;
-    }
-
-    var p = paths.src;
-    if (!fs.existsSync(p)) {
-        fs.mkdirSync(p);
-    }
-    p = path.join(p, appDataItem.table);
-
-    if (!fs.existsSync(p)) {
-        fs.mkdirSync(p);
-    }
-
-    p = path.join(p, (appDataItem.name + ext));
-    fs.writeFileSync(p, body);
-
-    return p;
-    */
+    
+    return typePaths;
 }
 
 function getFromServiceNow(uri) {
