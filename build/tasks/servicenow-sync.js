@@ -17,7 +17,7 @@ gulp.task('sync', function () {
     sequence('pull', 'dts');
 });
 
-gulp.task('default', [], function () {
+gulp.task('pull', [], function () {
     return pullAllFromServiceNow();
 });
 
@@ -36,6 +36,10 @@ function pushAllToServiceNow() {
 
     Object.keys(mappings).forEach(id => {
         var item = mappings[id];
+
+        if(!item || !item.fields){
+            return;
+        }
         
         var b = {
             id: id,
@@ -58,23 +62,22 @@ function pushAllToServiceNow() {
                 }
             }
 
-            switch (ext) {
-                case '.ts':
-                    var distPath = file.replace(path.normalize(paths.src), path.normalize(paths.dist));
-                    distPath = distPath.substring(0, distPath.length - ext.length) + '.js';
-                    if(!fs.existsSync(distPath)){
-                        throw 'Typescript output file was not found: ' + distPath;
-                    }
-                    b.fields[key] = fs.readFileSync(distPath, 'utf8');
-                    b.fields[key] = fs.readFileSync(file, 'utf8');
-                    break;
-                default:
-                    b.fields[key] = fs.readFileSync(file, 'utf8');
-                    break;
+            if(ext == '.ts' && (filePath.indexOf('.d.ts') == -1))
+            {
+                var distPath = filePath.replace(path.normalize(paths.src), path.normalize(paths.dist));
+                distPath = distPath.substring(0, distPath.length - ext.length) + '.js';
+                if(!fs.existsSync(distPath)){
+                    throw 'Typescript output file was not found: ' + distPath;
+                }
+                b.fields[key] = fs.readFileSync(distPath, 'utf8');
+                b.fields[sn.types[item.type][key].ts_field] = fs.readFileSync(filePath, 'utf8');
+            }
+            else{
+                b.fields[key] = fs.readFileSync(filePath, 'utf8');
             }
         });
 
-        upload[key] = b;
+        upload[id] = b;
     });
 
     return Q
@@ -94,6 +97,9 @@ function pushAllToServiceNow() {
                 });
 
                 fs.writeFileSync(sn.mapping, JSON.stringify(mappings, undefined, 3));
+            }
+            else{
+                throw 'Error on Update: ' + response.body;
             }
         });
 }
