@@ -54,7 +54,7 @@ function pushAllToServiceNow() {
 
             if(!fs.existsSync(filePath)){
                 if(ext == '.js'){
-                    filePath = filePath.substring(0, file.length - ext.length) + '.ts';
+                    filePath = filePath.substring(0, filePath.length - ext.length) + '.ts';
                     ext = '.ts';
                     if(!fs.existsSync(filePath)){
                         throw 'Unable to find mapping with either a .js or .ts extension' + filePath;
