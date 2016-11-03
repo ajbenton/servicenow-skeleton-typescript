@@ -10,9 +10,10 @@ var tsProject = ts.createProject('tsconfig.json', {
 });
 
 gulp.task('build', [], function () {
+    console.log("Building with TypeScript compiler version " + tsProject.typescript.version);
     var defer = Q.defer();
     var tsResult = gulp.src(paths.buildserver.ts)
-        .pipe(ts(tsProject))
+        .pipe(tsProject(ts.reporter.defaultReporter()))
         .on("error", function(err){ 
             defer.reject(err);
         })
