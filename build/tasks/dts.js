@@ -106,12 +106,12 @@ function writeDTS(target, definitions) {
 				dts += `\t\t\t${fieldname}: ${type}`;
 
 				if (fielddef.reference && definitions.hasOwnProperty(fielddef.reference)) {
-					dts += "|I" + fielddef.reference;
+					dts += " & I" + fielddef.reference;
 				}
 
 				// TODO: add support for string choice types to generate ("a"|"b"|"c") here.
 
-				dts += "|sn.Server.IGlideElement;\r\n";
+				dts += " & sn.Server.IGlideElement;\r\n";
 			}
 		});
 		dts += "\t\t}\r\n";
