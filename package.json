@@ -5,7 +5,13 @@
   "main": "gulpfile.js",
   "author": "Bryce Godfrey",
   "license": "ISC",
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/dotenv": "^4.0.2",
+    "@types/gulp": "^4.0.5",
+    "@types/node": "^9.4.7",
+    "@types/q": "^1.0.7",
+    "@types/request": "^2.47.0"
+  },
   "bin": {
     "skeleton": "./bin/skeleton.js"
   },
@@ -22,15 +28,17 @@
   },
   "homepage": "https://github.com/bryceg/servicenow-skeleton-typescript#readme",
   "dependencies": {
-    "dotenv": "^2.0.0",
+    "dotenv": "^5.0.0",
     "file": "^0.2.2",
     "gulp": "^3.9.1",
-    "gulp-typescript": "^3.2.3",
+    "gulp-typescript": "^4.0.0",
+    "gulpclass": "^0.1.2",
     "q": "^1.5.1",
     "request": "^2.85.0",
-    "require-dir": "^0.3.2",
-    "run-sequence": "^1.2.2",
-    "typescript": "^2.6.1",
+    "require-dir": "^1.0.0",
+    "run-sequence": "^2.2.1",
+    "ts-simple-ast": "^9.1.0",
+    "typescript": "^2.7.2",
     "typings": "^2.1.1"
   }
 }

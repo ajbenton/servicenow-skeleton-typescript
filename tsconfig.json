@@ -1,8 +1,21 @@
 {
-	"compilerOptions": {
-		"removeComments": true,
-		"target": "es5",
-		"noLib": false,
-		"outDir": "dist/"
-	}
+    "compilerOptions": {
+        "target": "es2015",
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "sourceMap": true,
+        "outDir": "dist",
+        "declaration": true,
+		"strict": true,
+        "experimentalDecorators": true,
+        "rootDir": "src"
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+		"node_modules",
+		"dist"
+    ]
 }
