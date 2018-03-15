@@ -15,13 +15,15 @@ if (fs.existsSync(".env")) {
 export class Gulpfile {
     private config: any;
     constructor() {
-        var path = require('path');
-        this.config = require('./servicenowconfig');        
+        var path = require('path');   
+        var configPath = path.resolve('./servicenowconfig.js');     
+        console.info(configPath)
+        this.config = require(configPath);        
     }
 
 	@Task()
 	dts() {
-        return new Promise((resolve, reject) => {
+        return new Promise<void>((resolve, reject) => {
             if(!this.checkUserSettings()){
                 reject('AUTHENTICATION NOT SET');
                 return;
@@ -53,7 +55,8 @@ export class Gulpfile {
 	private getAllTypes() : Array<string> {
 		const types : Array<string> = [];
 
-		const project = new Project();
+        console.info(`loading types from ts files at ${this.config.tsfiles}`);
+		const project = new Project({compilerOptions: {removeComments: false}});
 		project.addExistingSourceFiles(this.config.tsfiles);
         project.getSourceFiles()
             .forEach(file => {
@@ -75,9 +78,17 @@ export class Gulpfile {
                     }
                 });
 
-                const comments = file.getDescendantsOfKind(SyntaxKind.SingleLineCommentTrivia);
+                const comments = file.getDescendantsOfKind(SyntaxKind.JSDocComment);
                 comments.forEach(comment => {
-                    console.log("COMMENT: " + comment.getText());
+                    var content = comment.getText().trim();
+                    if(content.substr(0, 4) == 'dts:'){
+                        content.substr(5)
+                                .split(',')
+                                .forEach(t => {
+                                    if(types.indexOf(t) == -1)
+                                        types.push(t);
+                                });
+                    }
                 });
             });
 
@@ -106,21 +117,20 @@ export class Gulpfile {
             const fields = Object.keys(def.fields).sort();
             fields.forEach(fieldname => {
                 const fielddef = def.fields[fieldname];
-                if (ignoreFields.indexOf(fieldname) == -1 &&
-                    (!def.superclass ||
-                        (definitions.hasOwnProperty(def.superclass) && !definitions[def.superclass].fields.hasOwnProperty(fieldname)))) {
+                if (ignoreFields.indexOf(fieldname) == -1 && 
+                    (!def.superclass || (definitions.hasOwnProperty(def.superclass) && !definitions[def.superclass].fields.hasOwnProperty(fieldname)))) {
                     let type = fielddef.type;
                     if (type.match(/IGlide/g)) {
-                        type = `sn.Server.${type}`;
+                        type = `string`;
                     }
 
-                    dts += `\t\t\t${fieldname}: ${type}`;
+                    dts += `\t\t\t${fieldname}: sn.Server.IGlideElement & ${type}`;
 
                     if (fielddef.reference && definitions.hasOwnProperty(fielddef.reference)) {
                         dts += " & I" + fielddef.reference;
                     }
 
-                    dts += " & sn.Server.IGlideElement;\r\n";
+                    dts += ";\r\n";
                 }
             });
             dts += "\t\t}\r\n";
