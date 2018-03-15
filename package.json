@@ -9,7 +9,6 @@
     "@types/dotenv": "^4.0.2",
     "@types/gulp": "^4.0.5",
     "@types/node": "^9.4.7",
-    "@types/q": "^1.0.7",
     "@types/request": "^2.47.0"
   },
   "bin": {
@@ -33,7 +32,6 @@
     "gulp": "^3.9.1",
     "gulp-typescript": "^4.0.0",
     "gulpclass": "^0.1.2",
-    "q": "^1.5.1",
     "request": "^2.85.0",
     "require-dir": "^1.0.0",
     "run-sequence": "^2.2.1",

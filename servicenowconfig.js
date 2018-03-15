@@ -1,7 +1,9 @@
 module.exports = {
-    uri: 'https://[INSTANCE].service-now.com',
-    application: '[APPLICATION_ID]',
+    uri: 'https://darms.service-now.com',
+    application: '11ae84d94f7eb64069a027201310c755',
     mapping: 'snsyncmapping.json',
+    tsfiles: 'test/**/*.ts',
+    out: 'dist/',
     types: {
         'sys_script': {
             script: { type: 'js', ts_field: 'u_typescript' }
