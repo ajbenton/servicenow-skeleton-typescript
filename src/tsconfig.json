@@ -1,0 +1,12 @@
+{
+	"compilerOptions": {
+		"removeComments": true,
+		"target": "es5",
+		"noLib": false,
+        "outDir": "dist/",
+        "strict": true
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}

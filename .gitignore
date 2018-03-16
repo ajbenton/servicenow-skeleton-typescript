@@ -2,3 +2,6 @@ node_modules
 .env
 typings
 dist
+snsyncmapping.json
+out
+*.tgz

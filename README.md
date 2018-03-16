@@ -3,7 +3,7 @@
 ## Initial Project Setup
 ### Node Project Setup
 ```bash
-npm install servicenow-dev-skeleton
+npm i servicenow-dev-skeleton --save-dev
 node_modules\.bin\skeleton init
 typings install
 ```
@@ -40,9 +40,9 @@ You can now commit this change inside SN as you normally would in your developme
 ### DTS Generation
 As you write your code, any GlideRecord('[table_name]') source you create can be automatically scanned for typings generation by running the "gulp dts" task (automatically run by the "sync" task also).  This task will scan all .ts files in the src\ folder and detect any GlideRecord references and download d.ts schema for them. 
 
-If you need to manually add a reference to a table that may not be used via GlideRecord call such as dot walking, then add this to the top of your ts file and comma separate multiple table names:
+If you need to manually add a reference to a table that may not be used via GlideRecord call such as dot walking, then a JSDoc comment anywhere in the ts file, and use add dts: followed by a comma delimited string of the table names
 ```javsacript
-\\\<dts>tablename1,tablename2</dts>
+\*dts: tablename1,tablename2 **\
 ```
 
 A ServiceNow DTS is maintained at https://github.com/bryceg/servicenow-dts
@@ -63,7 +63,7 @@ Generates a servicenow.d.ts file from the servicenowconfig dts section.  This wi
 ### gulp pull
 Syncronizes your environment with the ServiceNow application specified in your config file.  Similar to "git pull"
 
-WARNING: This will overwrite any src files your have not uploaded to SN yet, so be sure to run sn-pull first or prepare for any edited files to be overwritten!
+*WARNING*: This will overwrite any src files your have not uploaded to SN yet, so be sure to run sn-pull first or prepare for any edited files to be overwritten!
 
 ### gulp push
 Compliles any typescript to javascript and uploads the results to the application

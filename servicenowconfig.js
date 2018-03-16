@@ -1,8 +1,10 @@
 module.exports = {
-    uri: 'https://darms.service-now.com',
-    application: '11ae84d94f7eb64069a027201310c755',
+    uri: 'https://[[INSTANCE]].service-now.com',
+    application: '[[APPLICATION_SYS_ID]]',
     mapping: 'snsyncmapping.json',
-    tsfiles: 'test/**/*.ts',
+    tsconfig: 'tsconfig.json',
+    tsfiles: 'src/**/*.ts',
+    src: 'src/',
     out: 'dist/',
     types: {
         'sys_script': {
@@ -27,6 +29,12 @@ module.exports = {
             html: { type: 'html' },
             processing_script: { type: 'js', ts_field: 'u_processing_script_typescript' },
             client_script: { type: 'js', ts_field: 'u_client_script_typescript' }
+        },
+        'content_css': {
+            style: { type: 'css'}
+        },
+        'sys_ui_script': {
+            script: { type: 'js'}
         }
     },
     dts: {
