@@ -1,8 +1,8 @@
 {
   "name": "servicenow-dev-skeleton",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Skeleton project for ServiceNow typescript development",
-  "main": "gulpfile.js",
+  "main": "dist/tasks.js",
   "author": "Bryce Godfrey",
   "license": "ISC",
   "bin": {
@@ -21,34 +21,30 @@
   },
   "homepage": "https://github.com/bryceg/servicenow-skeleton-typescript#readme",
   "files": [
-    "bin/",
-    "dist/",
+    "bin/skeleton.js",
+    "dist/tasks.js",
     "src/tsconfig.json",
     "package.json",
-    "gulpfile.js",
-    "typings.json",
-    "servicenowconfig.json",
-    "proj-tsconfig.json"
+    "package-lock.json",
+    "servicenowconfig.json"
   ],
   "dependencies": {
     "chalk": "^2.3.2",
     "dotenv": "^5.0.0",
-    "file": "^0.2.2",
     "gulp": "^3.9.1",
-    "gulp-typescript": "^4.0.0",
     "gulpclass": "^0.1.2",
+    "gulp-typescript": "^4.0.0",
     "request": "^2.85.0",
     "require-dir": "^1.0.0",
-    "run-sequence": "^2.2.1",
     "ts-simple-ast": "^9.1.0",
-    "typescript": "^2.7.2",
-    "typings": "^2.1.1"
+    "typescript": "^2.7.2"
   },
   "devDependencies": {
     "@types/chalk": "^2.2.0",
     "@types/dotenv": "^4.0.2",
     "@types/gulp": "^4.0.5",
     "@types/node": "^9.4.7",
-    "@types/request": "^2.47.0"
+    "@types/request": "^2.47.0",
+    "typings": "^2.1.1"
   }
 }

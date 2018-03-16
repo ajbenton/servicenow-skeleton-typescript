@@ -3,7 +3,6 @@ module.exports = {
     application: '[[APPLICATION_SYS_ID]]',
     mapping: 'snsyncmapping.json',
     tsconfig: 'tsconfig.json',
-    tsfiles: 'src/**/*.ts',
     src: 'src/',
     out: 'dist/',
     types: {

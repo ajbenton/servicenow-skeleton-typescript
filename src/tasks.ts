@@ -18,7 +18,16 @@ export class Gulpfile {
     constructor() {
         const path = require('path');   
         const configPath = path.resolve('./servicenowconfig.js');     
-        this.config = require(configPath);        
+        this.config = require(configPath);  
+        
+        if(!this.config.src)
+            throw 'servicenowconfig.js missing "src" path property';
+
+        if(!this.config.out)
+            throw 'servicenowconfig.js missing "out" path property';
+
+        if(!this.config.tsconfig)
+            throw 'servicenowconfig.js missing "tsconfig" path property';
     }
 
 	@Task()
@@ -49,7 +58,7 @@ export class Gulpfile {
         });
 
         return gulp
-                .src(this.config.tsfiles)
+                .src(this.config.src+'**/*.ts')
                 .pipe(tsProject(gulpts.reporter.defaultReporter()))
                 .pipe(gulp.dest(this.config.out));
     }
@@ -281,10 +290,10 @@ export class Gulpfile {
 	
 	private getAllTypes() : Array<string> {
 		let types : Array<string> = [];
-
-        console.info(`loading types from ts files at ${this.config.tsfiles}`);
+        let srcPath = this.config.src + '**/*.ts';
+        console.info(`loading types from ts files at ${srcPath}`);
 		const project = new Project({compilerOptions: {removeComments: false}});
-		project.addExistingSourceFiles(this.config.tsfiles);
+		project.addExistingSourceFiles(srcPath);
         project.getSourceFiles()
             .forEach(file => {
                 //find all new expressions and see if they are gliderecord:  const foo = new GlideRecord('sometable');

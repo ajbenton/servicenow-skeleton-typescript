@@ -25,7 +25,7 @@ if(process.argv[process.argv.length-1] == 'init'){
     });
 
     var gulpFileDest = path.join(appRoot, 'gulpfile.js');
-    var content = "require('require-dir')('" + path.normalize(path.join(sourceRoot, "build", "tasks")).replace(/\\/g, '\\\\') + "')";
+    var content = "require('require-dir')('" + path.normalize(path.join(sourceRoot, "dist")).replace(/\\/g, '\\\\') + "')";
     if(fs.existsSync(gulpFileDest)){
         content = fs.readFileSync(gulpFileDest, 'utf8') + '\r\n' + content;
     }
