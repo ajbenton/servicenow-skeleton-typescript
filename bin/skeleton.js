@@ -14,13 +14,13 @@ if(process.argv[process.argv.length-1] == 'init'){
 
     var appRoot = process.cwd();
 
-    var copyFiles = ['servicenowconfig.js', 'tsconfig.json', 'typings.json'];
+    var copyFiles = ['servicenowconfig.js', 'src/tsconfig.json', 'typings.json'];
     var sourceRoot = path.relative(appRoot, path.dirname(path.dirname(process.argv[1])));
 
     copyFiles.forEach(file => {
-        var dest = path.join(appRoot, path.basename(file));
+        var dest = path.join(appRoot, path.basename(target));
         if(!fs.existsSync(dest)){
-            copyFile(path.join(sourceRoot, file), dest);
+            copyFile(path.join(sourceRoot, path.basename(file)), dest);
         }
     });
 

@@ -1,6 +1,7 @@
 node_modules
-dist/
-src/
-typings/
-snsyncmapping.json
 .env
+typings
+dist
+snsyncmapping.json
+out
+*.tgz
