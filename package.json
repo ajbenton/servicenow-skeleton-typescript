@@ -26,7 +26,8 @@
     "src/tsconfig.json",
     "package.json",
     "package-lock.json",
-    "servicenowconfig.json"
+    "servicenowconfig.json",
+    "typings.json"
   ],
   "dependencies": {
     "chalk": "^2.3.2",
