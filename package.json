@@ -1,6 +1,6 @@
 {
   "name": "servicenow-dev-skeleton",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Skeleton project for ServiceNow typescript development",
   "main": "dist/tasks.js",
   "author": "Bryce Godfrey",
@@ -33,8 +33,9 @@
     "chalk": "^2.3.2",
     "dotenv": "^5.0.0",
     "gulp": "^3.9.1",
-    "gulpclass": "^0.1.2",
+    "gulp-clang-format": "^1.0.25",
     "gulp-typescript": "^4.0.0",
+    "gulpclass": "^0.1.2",
     "request": "^2.85.0",
     "require-dir": "^1.0.0",
     "ts-simple-ast": "^9.1.0",
