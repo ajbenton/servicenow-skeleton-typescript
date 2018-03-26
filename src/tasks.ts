@@ -69,7 +69,7 @@ export class Gulpfile {
 
         return gulp
                 .src(this.config.src+'**/*.ts')
-                .pipe(format.format())
+                .pipe(format.format(clangFormat))
                 .pipe(gulp.dest(this.config.src));
     }
 

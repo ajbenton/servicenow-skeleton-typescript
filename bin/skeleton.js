@@ -18,7 +18,7 @@ if(process.argv[process.argv.length-1] == 'init'){
     var sourceRoot = path.relative(appRoot, path.dirname(path.dirname(process.argv[1])));
 
     copyFiles.forEach(file => {
-        var dest = path.join(appRoot, path.basename(target));
+        var dest = path.join(appRoot, path.basename(file));
         if(!fs.existsSync(dest)){
             copyFile(path.join(sourceRoot, path.basename(file)), dest);
         }
