@@ -1,6 +1,6 @@
 {
   "dependencies": {},
   "globalDependencies": {
-    "servicenowserver": "github:bryceg/servicenow-dts/server/scoped-helsinki/index.d.ts#v2.1"
+    "servicenowserver": "github:bryceg/servicenow-dts/server/scoped-helsinki/index.d.ts#v2.2"
   }
 }

@@ -14,7 +14,7 @@ if(process.argv[process.argv.length-1] == 'init'){
 
     var appRoot = process.cwd();
 
-    var copyFiles = ['servicenowconfig.js', 'src/tsconfig.json', 'typings.json'];
+    var copyFiles = ['servicenowconfig.js', 'src/tsconfig.json', 'typings.json', 'tslint.json'];
     var sourceRoot = path.relative(appRoot, path.dirname(path.dirname(process.argv[1])));
 
     copyFiles.forEach(file => {
