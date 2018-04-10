@@ -1,0 +1,102 @@
+{
+    "defaultSeverity": "error",
+    "extends": "tslint:recommended",
+    "jsRules": {},
+    "rules": {
+        "arrow-parens": [
+            true,
+            "ban-single-arg-parens"
+        ],
+        "align": [
+            true,
+            "members",
+            "parameters",
+            "statements"
+        ],
+        "array-type": [
+            true,
+            "generic"
+        ],
+        "ban-comma-operator": true,
+        "ban-types": [
+            true,
+            [
+                "Object",
+                "Use {} instead."
+            ],
+            [
+                "String",
+                "Use 'string' instead."
+            ],
+            [
+                "Number",
+                "Use 'number' instead."
+            ],
+            [
+                "Boolean",
+                "Use 'boolean' instead."
+            ]
+        ],
+        "curly": [true, "ignore-same-line"],
+        "cyclomatic-complexity": { 
+            "options": true, 
+            "severity": "warning" 
+        },
+        "forin": { 
+            "options": true, 
+            "severity": "warning" 
+        },
+        "indent": [
+            true,
+            "spaces",
+            2
+        ],
+        "interface-over-type-literal": false,
+        "jsdoc-format": true,
+        "max-classes-per-file": false,
+        "max-line-length": { "options": [150], "severity": "warning" },
+        "no-bitwise": false,
+        "no-conditional-assignment": true,
+        "no-console": false,
+        "no-eval": false,
+        "no-internal-module": false,
+        "no-namespace": false,
+        "no-reference": false,
+        "no-shadowed-variable": false,
+        "no-string-throw": false,
+        "no-var-keyword": true,
+        "one-line": false,
+        "object-literal-shorthand": [true, "never"],
+        "only-arrow-functions": [
+            true,
+            "allow-declarations",
+            "allow-named-functions"
+        ],
+        "prefer-for-of": false,
+        "quotemark": [
+            true,
+            "double"
+        ],
+        "radix": false,
+        "semicolon": [true, "always", "ignore-bound-class-methods"],
+        "switch-default": true,
+        "trailing-comma": [
+            true,
+            {
+                "multiline": "never",
+                "singleline": "never"
+            }
+        ],
+        "triple-equals": [
+            true,
+            "allow-null-check"
+        ],
+        "whitespace": [
+            true,
+            "check-branch",
+            "check-operator",
+            "check-rest-spread"
+        ]
+    },
+    "rulesDirectory": []
+}
