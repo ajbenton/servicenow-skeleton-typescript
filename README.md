@@ -13,7 +13,7 @@ typings install
 - application = sys_id of the ServiceNow scoped application your are developing
 
 ### Set your personal username and password for ServiceNow authentication
-Attempt to run "gulp pull" task, if your .env file is not set up correctly this task will warn you can create the file.
+Attempt to run "gulp dts" task, if your .env file is not set up correctly this task will warn you can create the file.
 In the .env file, set your ServiceNow credentials.
 
 ## How to use this skeleton for your SN App

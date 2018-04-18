@@ -26,7 +26,7 @@
     "src/tsconfig.json",
     "package.json",
     "package-lock.json",
-    "servicenowconfig.json",
+    "servicenowconfig.js",
     "typings.json",
     "tslint.json"
   ],
