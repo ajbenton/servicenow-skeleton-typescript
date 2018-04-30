@@ -42,7 +42,7 @@ As you write your code, any GlideRecord('[table_name]') source you create can be
 
 If you need to manually add a reference to a table that may not be used via GlideRecord call such as dot walking, then a JSDoc comment anywhere in the ts file, and use add dts: followed by a comma delimited string of the table names
 ```javsacript
-\*dts: tablename1,tablename2 **\
+/** dts: tablename1,tablename2 */
 ```
 
 A ServiceNow DTS is maintained at https://github.com/bryceg/servicenow-dts
