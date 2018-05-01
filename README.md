@@ -13,7 +13,7 @@ typings install
 - application = sys_id of the ServiceNow scoped application your are developing
 
 ### Set your personal username and password for ServiceNow authentication
-Attempt to run "gulp pull" task, if your .env file is not set up correctly this task will warn you can create the file.
+Attempt to run "gulp dts" task, if your .env file is not set up correctly this task will warn you can create the file.
 In the .env file, set your ServiceNow credentials.
 
 ## How to use this skeleton for your SN App
@@ -42,7 +42,7 @@ As you write your code, any GlideRecord('[table_name]') source you create can be
 
 If you need to manually add a reference to a table that may not be used via GlideRecord call such as dot walking, then a JSDoc comment anywhere in the ts file, and use add dts: followed by a comma delimited string of the table names
 ```javsacript
-\*dts: tablename1,tablename2 **\
+/** dts: tablename1,tablename2 */
 ```
 
 A ServiceNow DTS is maintained at https://github.com/bryceg/servicenow-dts

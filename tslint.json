@@ -49,7 +49,7 @@
         "indent": [
             true,
             "spaces",
-            2
+            4
         ],
         "interface-over-type-literal": false,
         "jsdoc-format": true,
@@ -87,10 +87,12 @@
                 "singleline": "never"
             }
         ],
-        "triple-equals": [
-            true,
-            "allow-null-check"
-        ],
+        // NOTE: if you enable this ensure that you check glideRecord.active.toString() === "true"
+        // instead of glideRecord.active === "true"
+        // "triple-equals": [
+        //     true,
+        //     "allow-null-check"
+        // ],
         "whitespace": [
             true,
             "check-branch",
