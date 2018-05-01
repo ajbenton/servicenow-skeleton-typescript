@@ -395,7 +395,8 @@ export class Gulpfile {
                 });
 
                 // Find all dts comment defs: /**dts: tablename1,tablename2 */
-                const dtsregex = new RegExp(/dts:[\s+]?([\w,\d\s]+)/gi);
+                // support multiline
+                const dtsregex = new RegExp(/dts:[\s+]?([\w,\d\s\r\n\*]+)/gi);
 
                 const comments = file.getDescendantsOfKind(SyntaxKind.JSDocComment);
                 comments.forEach(comment => {
@@ -405,6 +406,7 @@ export class Gulpfile {
                         const matchtypes = match[1];
                         const matches = matchtypes
                             .trim()
+                            .replace(/[\r\n\*]/g,"") // remove newline and * characters
                             .split(",")
                             .map(m => m.trim())
                             .filter(m => types.indexOf(m) === -1);
