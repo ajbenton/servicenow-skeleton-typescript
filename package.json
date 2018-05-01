@@ -44,11 +44,14 @@
     "typescript": "^2.7.2"
   },
   "devDependencies": {
+    "@types/assert": "0.0.31",
     "@types/chalk": "^2.2.0",
     "@types/dotenv": "^4.0.2",
     "@types/gulp": "^4.0.5",
+    "@types/mocha": "^5.2.0",
     "@types/node": "^9.6.2",
     "@types/request": "^2.47.0",
+    "mocha": "^5.1.1",
     "typings": "^2.1.1"
   }
 }
