@@ -42,7 +42,7 @@
     "require-dir": "^1.0.0",
     "ts-simple-ast": "^9.1.0",
     "tslint": "^5.9.1",
-    "typescript": "^2.8.1"
+    "typescript": "^2.8.3"
   },
   "devDependencies": {
     "@types/assert": "0.0.31",
