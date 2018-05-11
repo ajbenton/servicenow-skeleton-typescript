@@ -1,104 +1,154 @@
 {
     "defaultSeverity": "error",
-    "extends": "tslint:recommended",
     "jsRules": {},
     "rules": {
-        "arrow-parens": [
-            true,
-            "ban-single-arg-parens"
-        ],
-        "align": [
-            true,
-            "members",
-            "parameters",
-            "statements"
-        ],
-        "array-type": [
-            true,
-            "generic"
-        ],
-        "ban-comma-operator": true,
-        "ban-types": [
-            true,
-            [
-                "Object",
-                "Use {} instead."
-            ],
-            [
-                "String",
-                "Use 'string' instead."
-            ],
-            [
-                "Number",
-                "Use 'number' instead."
-            ],
-            [
-                "Boolean",
-                "Use 'boolean' instead."
+        "adjacent-overload-signatures": true,
+        "align": false,
+        "array-type": {
+            "options": [
+                "generic"
             ]
-        ],
-        "curly": [true, "ignore-same-line"],
-        "cyclomatic-complexity": { 
-            "options": true, 
-            "severity": "warning" 
         },
-        "forin": { 
-            "options": true, 
-            "severity": "warning" 
+        "arrow-parens": [true, "ban-single-arg-parens"],
+        "arrow-return-shorthand": true,
+        "ban-types": {
+            "options": [
+                [
+                    "Object",
+                    "Avoid using the `Object` type. Did you mean `object`?"
+                ],
+                [
+                    "Function",
+                    "Avoid using the `Function` type. Prefer a specific function type, like `() => void`."
+                ],
+                [
+                    "Boolean",
+                    "Avoid using the `Boolean` type. Did you mean `boolean`?"
+                ],
+                [
+                    "Number",
+                    "Avoid using the `Number` type. Did you mean `number`?"
+                ],
+                [
+                    "String",
+                    "Avoid using the `String` type. Did you mean `string`?"
+                ],
+                [
+                    "Symbol",
+                    "Avoid using the `Symbol` type. Did you mean `symbol`?"
+                ]
+            ]
         },
-        "indent": [
-            true,
-            "spaces",
-            4
-        ],
+        "callable-types": true,
+        "class-name": true,
+        "comment-format": {
+            "options": [
+                "check-space"
+            ]
+        },
+        "curly": {
+            "options": [
+                "ignore-same-line"
+            ]
+        },
+        "cyclomatic-complexity": {
+            "options": [20],
+            "severity": "warning"
+        },
+        "eofline": true,
+        "forin": {
+            "options": [true],
+            "severity": "warning"
+        },
+        "import-spacing": true,
+        "indent": false,
+        "interface-name": {
+            "options": [
+                "always-prefix"
+            ]
+        },
         "interface-over-type-literal": false,
         "jsdoc-format": true,
+        "label-position": true,
         "max-classes-per-file": false,
-        "max-line-length": { "options": [150], "severity": "warning" },
+        "max-line-length": false,
+        "member-access": true,
+        "member-ordering": {
+            "options": {
+                "order": "statics-first"
+            }
+        },
+        "new-parens": true,
+        "no-angle-bracket-type-assertion": true,
+        "no-any": false,
+        "no-arg": true,
         "no-bitwise": false,
         "no-conditional-assignment": true,
+        "no-consecutive-blank-lines": true,
         "no-console": false,
+        "no-construct": true,
+        "no-debugger": true,
+        "no-duplicate-super": true,
+        "no-empty": true,
+        "no-empty-interface": true,
         "no-eval": false,
         "no-internal-module": false,
+        "no-invalid-this": false,
+        "no-misused-new": true,
         "no-namespace": false,
+        "no-parameter-properties": false,
         "no-reference": false,
+        "no-reference-import": true,
         "no-shadowed-variable": false,
+        "no-string-literal": true,
         "no-string-throw": false,
+        "no-switch-case-fall-through": false,
+        "no-trailing-whitespace": true,
+        "no-unnecessary-initializer": true,
+        "no-unsafe-finally": true,
+        "no-unused-expression": true,
+        // disable this rule as it is very heavy performance-wise and not that useful
+        "no-use-before-declare": false,
         "no-var-keyword": true,
-        "one-line": false,
+        "no-var-requires": true,
+        "object-literal-key-quotes": false,
         "object-literal-shorthand": [true, "never"],
-        "only-arrow-functions": [
-            true,
-            "allow-declarations",
-            "allow-named-functions"
-        ],
+        "object-literal-sort-keys": true,
+        "one-line": false,
+        "one-variable-per-declaration": {
+            "options": [
+                "ignore-for-loop"
+            ]
+        },
+        "only-arrow-functions": {
+            "options": [
+                "allow-declarations",
+                "allow-named-functions"
+            ]
+        },
+        "ordered-imports": false,
+        "prefer-const": true,
         "prefer-for-of": false,
-        "quotemark": [
-            true,
-            "double"
-        ],
+        "quotemark": false,
         "radix": false,
-        "semicolon": [true, "always", "ignore-bound-class-methods"],
+        "semicolon": false,
+        "space-before-function-paren": false,
         "switch-default": true,
-        "trailing-comma": [
-            true,
-            {
-                "multiline": "never",
-                "singleline": "never"
-            }
-        ],
-        // NOTE: if you enable this ensure that you check glideRecord.active.toString() === "true"
-        // instead of glideRecord.active === "true"
-        // "triple-equals": [
-        //     true,
-        //     "allow-null-check"
-        // ],
-        "whitespace": [
-            true,
-            "check-branch",
-            "check-operator",
-            "check-rest-spread"
-        ]
+        "trailing-comma": false,
+        "triple-equals": false,
+        "typedef": false,
+        "typedef-whitespace": false,
+        "typeof-compare": false,
+        "unified-signatures": true,
+        "use-isnan": true,
+        "variable-name": {
+            "options": [
+                "ban-keywords",
+                "check-format",
+                "allow-pascal-case"
+            ]
+        },
+        "whitespace": false
     },
     "rulesDirectory": []
 }

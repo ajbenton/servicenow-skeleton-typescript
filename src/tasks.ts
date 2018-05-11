@@ -56,21 +56,14 @@ export class Gulpfile {
 
     @Task()
     public format(){
-        const format = require("gulp-clang-format");
-        const clangFormat = {
-            AllowShortFunctionsOnASingleLine: false,
-            BasedOnStyle: "Mozilla",
-            BreakBeforeBraces: "Attach",
-            ColumnLimit: 500,
-            CommentPragmas: "^/<reference|^/<dts>",
-            IndentWidth: 2,
-            JavaScriptQuotes: "Double",
-            Language: "JavaScript",
-            MaxEmptyLinesToKeep: 1
-        };
+        const prettier = require("gulp-prettier");
         return gulp
                 .src(this.config.src + "**/*.ts")
-                .pipe(format.format(clangFormat))
+                .pipe(prettier({
+                    parser: "typescript",
+                    printWidth: 150,
+                    tabWidth: 4
+                 }))
                 .pipe(gulp.dest(this.config.src));
     }
 
@@ -124,7 +117,7 @@ export class Gulpfile {
                 }));
     }
 
-    @Task(undefined, ["tslint"])
+    @Task(undefined, ["tslint", "format"])
     public build(){
         const tsProject = gulpts.createProject(this.config.tsconfig, {
             typescript: require("typescript")
