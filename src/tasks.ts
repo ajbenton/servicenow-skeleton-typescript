@@ -61,7 +61,7 @@ export class Gulpfile {
                 .src(this.config.src + "**/*.ts")
                 .pipe(prettier({
                     parser: "typescript",
-                    printWidth: 150,
+                    printWidth: 200,
                     tabWidth: 4
                  }))
                 .pipe(gulp.dest(this.config.src));
